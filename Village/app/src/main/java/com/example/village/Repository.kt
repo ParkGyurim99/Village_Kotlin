@@ -13,7 +13,7 @@ class Repository {
         val database = FirebaseFirestore.getInstance()
         val myRef = database.collection("user-posts")
 
-        myRef.get()
+        myRef.orderBy("timestamp").get()
             .addOnSuccessListener { documentSnapshot ->
                 val listData: MutableList<Post> = mutableListOf<Post>()
 

@@ -11,11 +11,16 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.village.databinding.ActivityAppMainBinding
 import com.example.village.model.Person
+import com.example.village.model.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -26,6 +31,11 @@ class AppMainActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
     lateinit var auth : FirebaseAuth;
     private val TAG = "Firestore";
+
+    /* 리사이클러 뷰 */
+    private lateinit var adapter : ListAdapter
+    private val viewModel by lazy { ViewModelProvider(this).get(ListViewModel::class.java) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAppMainBinding.inflate(layoutInflater)
@@ -42,14 +52,14 @@ class AppMainActivity : AppCompatActivity() {
 
 
         var searchOption = "name"
-        val recyclerView : RecyclerView = findViewById(R.id.recyclerview)
+        // val recyclerView : RecyclerView = findViewById(R.id.recyclerview)
         btn_map.setOnClickListener {
             val intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
         }
-        btn_search.setOnClickListener {
+        /*btn_search.setOnClickListener {
             (recyclerView.adapter as RecyclerViewAdapter).search(searchWord.text.toString(), searchOption)
-        }
+        }*/
         btn_write2.setOnClickListener {
             val intent = Intent(this, WriteActivity::class.java)
             startActivity(intent)
@@ -67,8 +77,28 @@ class AppMainActivity : AppCompatActivity() {
             val intent = Intent(this,UserInfoActivity::class.java)
             startActivity(intent)
         }
+
+
+        adapter = ListAdapter()
+
+        // 리사이클러 뷰
+        val recyclerView : RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)  // 리사이클러 뷰 방향 등을 설정
+        recyclerView.adapter = adapter  // 어댑터 장착
+        observerData()
+
+        // 리사이클러 뷰 새로고침
+        val swipeRefresh = findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
+        swipeRefresh.setOnRefreshListener {
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = adapter
+            observerData()
+
+            swipeRefresh.isRefreshing = false   // 새로고침
+        }
+
         // 파이어스토어 인스턴스 초기화
-        firestore = FirebaseFirestore.getInstance()
+        /*firestore = FirebaseFirestore.getInstance()
 
         recyclerView.adapter = RecyclerViewAdapter()
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -120,11 +150,18 @@ class AppMainActivity : AppCompatActivity() {
             builder.setNegativeButton("취소") { dialog, which ->
             }
             builder.show()
-        }
+        }*/
     }
 
+    // 리사이클러 뷰
+    fun observerData() {
+        viewModel.fetchData().observe(this, Observer {
+            adapter.setListData(it)
+            adapter.notifyDataSetChanged()
+        })
+    }
 
-    inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    /*inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         // Person 클래스 ArrayList 생성성
         var telephoneBook : ArrayList<Person> = arrayListOf()
 
@@ -194,6 +231,5 @@ class AppMainActivity : AppCompatActivity() {
                 notifyDataSetChanged()
             }
         }
-
-    }
+    }*/
 }

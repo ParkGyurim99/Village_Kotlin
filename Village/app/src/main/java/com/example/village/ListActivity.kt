@@ -17,7 +17,7 @@ class ListActivity : AppCompatActivity() {
         // setContentView(R.layout.posting)
         setContentView(R.layout.db_text)    // DB에서 읽기 테스트용 화면
 
-        adapter = ListAdapter(this)
+        adapter = ListAdapter()
 
         val recyclerView : RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)

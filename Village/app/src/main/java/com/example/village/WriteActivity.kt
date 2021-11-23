@@ -10,7 +10,10 @@ import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.village.model.Post
+import com.example.village.model.UserModel
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.lang.Exception
@@ -35,6 +38,9 @@ class WriteActivity : AppCompatActivity() {
     var storage = Firebase.storage
     var storageRef = storage.reference
 
+    /* 현재 로그인한 사용자 */
+    val user = Firebase.auth.currentUser
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.writing)
@@ -47,21 +53,50 @@ class WriteActivity : AppCompatActivity() {
         etBody = findViewById(R.id.etBody)
 
         ivGoods_w = findViewById(R.id.ivGoods_w)
-        test_name = findViewById(R.id.test_name)
 
         // 갤러리 열고, 사진 고르면 표시해주는 버튼
-        btnUploadPic.setOnClickListener { 
+        btnUploadPic.setOnClickListener {
             openGallery()
         }
 
         // 작성 완료 버튼 누를 시, DB에 포스트 업로드
         btnWrite.setOnClickListener {
             var title = etTitle.text.toString()
-            var price = etPrice.text.toString()
+            var price = etPrice.text.toString().toInt()
             var body = etBody.text.toString()
-            var user_name = test_name.text.toString()
 
-            postUpload(user_name, imgUri, title, price, body)
+            // 닉네임과 uid도 같이 저장
+            var uid = user!!.uid
+            var nickname: String = "실패"    // user.displayName
+
+            // 같은 uid를 가진 사용자 닉네임 DB에서 가져오기
+            database.collection("users").get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot != null) {
+                        for (document in documentSnapshot) {
+                            val getData = document.toObject<UserModel>()
+
+                            println(" ")
+                            println(" ")
+                            println("if문 안에 진입 : getData? " + getData.uid)
+                            println("if문 안에 진입 : uid? " + uid)
+                            println(" ")
+                            println(" ")
+
+                            if (getData!!.uid.contentEquals(uid)) {
+                                nickname = getData.userName.toString()
+
+                                postUpload(nickname!!, uid, imgUri, title, price, body) // 리스너 안에다 넣어야 되네..
+                                break
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("DocSnippets", "Error getting documents: ", exception)
+                }
+
+            // document(uid)
 
             finish()
         }
@@ -103,17 +138,20 @@ class WriteActivity : AppCompatActivity() {
     }
 
     // DB에 포스트 올리는 함수
-    private fun postUpload(userName: String, uri: Uri?, title: String, price: String, body: String) {
+    private fun postUpload(nickname: String, uid: String, imageUri: Uri?, title: String, price: Int, body: String) {
         var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         var imageFileName = "IMAGE_" + timestamp + ".png"
 
         var imageRef = storageRef.child("images/").child(imageFileName)
 
-        imageRef?.putFile(uri!!).addOnSuccessListener {
+        imageRef?.putFile(imageUri!!).addOnSuccessListener {
             var newPost = Post()
 
-            newPost.nickname = userName.toString()
-            newPost.imageUrl = imageFileName
+            // 닉네임과 uid도 같이 저장
+            newPost.nickname = nickname
+            newPost.uid = uid
+
+            newPost.imageUrl = "gs://village-e6e1a.appspot.com/images/" + imageFileName
             newPost.title = title
             newPost.price = price
             newPost.body = body
