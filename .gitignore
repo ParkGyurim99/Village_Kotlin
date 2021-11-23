@@ -191,3 +191,5 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,androidstudio
 Village/.idea/vcs.xml
+Village/.idea/misc.xml
+.DS_Store
