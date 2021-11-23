@@ -16,21 +16,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.village.databinding.ActivityAppMainBinding
 import com.example.village.model.Person
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class AppMainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityAppMainBinding
     var firestore : FirebaseFirestore? = null
     val db = FirebaseFirestore.getInstance()
-    private val TAG = "Firestore"
+    lateinit var auth : FirebaseAuth;
+    private val TAG = "Firestore";
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAppMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        auth = Firebase.auth
         val btn_map : ImageView = findViewById<ImageView>(R.id.btn_map)
         val btn_search : Button = findViewById<Button>(R.id.btn_search)
         val searchWord : EditText = findViewById<EditText>(R.id.searchWord)
         val btn_write : Button = findViewById<Button>(R.id.btn_write)
         val btn_write2 : Button = findViewById<Button>(R.id.btn_write2)
+        val btn_signOut: Button = findViewById<Button>(R.id.btn_signOut)
+        val btn_userInfo : Button = findViewById<Button>(R.id.btn_userInfo)
+
+
         var searchOption = "name"
         val recyclerView : RecyclerView = findViewById(R.id.recyclerview)
         btn_map.setOnClickListener {
@@ -42,6 +52,19 @@ class AppMainActivity : AppCompatActivity() {
         }
         btn_write2.setOnClickListener {
             val intent = Intent(this, WriteActivity::class.java)
+            startActivity(intent)
+        }
+        btn_signOut.setOnClickListener {
+            println("hi");
+            val intent = Intent(this,LoginActivity::class.java)
+            println(auth.currentUser)
+            if(auth.currentUser != null) {
+                auth.signOut()
+            }
+            startActivity(intent)
+        }
+        btn_userInfo.setOnClickListener {
+            val intent = Intent(this,UserInfoActivity::class.java)
             startActivity(intent)
         }
         // 파이어스토어 인스턴스 초기화

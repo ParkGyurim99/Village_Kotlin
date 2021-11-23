@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
+
 }
 
 android {
@@ -34,6 +36,10 @@ android {
     buildFeatures{
         viewBinding = true
     }
+    dataBinding {
+        enabled = true
+    }
+
 }
 
 dependencies {
@@ -56,8 +62,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     // image
     implementation 'com.github.bumptech.glide:glide:4.10.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     kapt "android.arch.lifecycle:compiler:1.0.0"
     kapt 'com.github.bumptech.glide:compiler:4.10.0'
+    kapt 'com.android.databinding:compiler:3.0.1'
+
     def lifecycle_version = "2.3.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
