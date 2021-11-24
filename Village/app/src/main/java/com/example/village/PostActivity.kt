@@ -41,11 +41,9 @@ class PostActivity : AppCompatActivity() {
 
     /* 현재 로그인한 사용자 */
     val user = Firebase.auth.currentUser
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.posting)
-
         ivGoods_p = findViewById(R.id.ivGoods_p)
         tvName = findViewById(R.id.tvName)
         tvLocation = findViewById(R.id.tvLocation)
@@ -59,8 +57,7 @@ class PostActivity : AppCompatActivity() {
         tvPrice = findViewById(R.id.tvPrice)
         btnHeart = findViewById(R.id.btnHeart)
 
-
-        val intentPost = intent.getSerializableExtra("intent-post") as Post
+        val intentPost = intent.getSerializableExtra("user-posts") as Post
 
         // 이미지 (이제 얘만 되면 되겠다)
         GlideApp.with(this)

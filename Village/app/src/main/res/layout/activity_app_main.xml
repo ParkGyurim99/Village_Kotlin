@@ -67,14 +67,8 @@
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_dialog_map"
             android:layout_gravity="right"/>
-
         <Button
             android:id="@+id/btn_write"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="글쓰기"/>
-        <Button
-            android:id="@+id/btn_write2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="진글쓰기"/>

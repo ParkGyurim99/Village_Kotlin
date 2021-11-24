@@ -46,7 +46,6 @@ class AppMainActivity : AppCompatActivity() {
         val btn_search : Button = findViewById<Button>(R.id.btn_search)
         val searchWord : EditText = findViewById<EditText>(R.id.searchWord)
         val btn_write : Button = findViewById<Button>(R.id.btn_write)
-        val btn_write2 : Button = findViewById<Button>(R.id.btn_write2)
         val btn_signOut: Button = findViewById<Button>(R.id.btn_signOut)
         val btn_userInfo : Button = findViewById<Button>(R.id.btn_userInfo)
 
@@ -60,7 +59,7 @@ class AppMainActivity : AppCompatActivity() {
         /*btn_search.setOnClickListener {
             (recyclerView.adapter as RecyclerViewAdapter).search(searchWord.text.toString(), searchOption)
         }*/
-        btn_write2.setOnClickListener {
+        btn_write.setOnClickListener {
             val intent = Intent(this, WriteActivity::class.java)
             startActivity(intent)
         }
@@ -96,7 +95,16 @@ class AppMainActivity : AppCompatActivity() {
 
             swipeRefresh.isRefreshing = false   // 새로고침
         }
+        adapter.setOnItemClickListener(object :
+            ListAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: Post, pos : Int) {
+                Intent(this@AppMainActivity, PostActivity::class.java).apply {
+                    putExtra("user-posts", data)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }.run { startActivity(this) }
+            }
 
+        })
         // 파이어스토어 인스턴스 초기화
         /*firestore = FirebaseFirestore.getInstance()
 

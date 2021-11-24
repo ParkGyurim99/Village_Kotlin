@@ -1,35 +1,36 @@
 package com.example.village
 
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.village.ListAdapter.ViewHolder
 import com.example.village.model.Post
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
-class ListAdapter(): RecyclerView.Adapter<ViewHolder>() {
+class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var postList = mutableListOf<Post>()
+    private var mContext: Context? = null
 
-    private var mContext : Context? = null
+    interface OnItemClickListener{
+        fun onItemClick(v:View, data: Post, pos: Int)
+    }
+    private var listener : OnItemClickListener? = null
+    fun setOnItemClickListener(listener : OnItemClickListener) {
+        this.listener = listener
+    }
 
-    fun setListData(data: MutableList<Post>){
+    fun setListData(data: MutableList<Post>) {
         postList = data
     }
 
     // 아이템 레이아웃과 결합
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
+            ListAdapter.ViewHolder {
         mContext = parent.context
 
         val view = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false)
@@ -38,8 +39,9 @@ class ListAdapter(): RecyclerView.Adapter<ViewHolder>() {
     }
 
     // View에 내용 입력
-    override fun onBindViewHolder(holder: ListAdapter.ViewHolder, position: Int) {
-        val post : Post = postList[position]
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val post: Post = postList[position]
+        var viewHolder = (holder as ViewHolder).itemView
 
         holder.bind(post)
     }
@@ -49,24 +51,24 @@ class ListAdapter(): RecyclerView.Adapter<ViewHolder>() {
         return postList.size
     }
 
+    // onCreateViewHolder에서 만든 view와 실제 데이터를 연결
     // 레이아웃 내 View 연결
     inner class ViewHolder(itemView: View)  // itemView는 list_item.xml
         : RecyclerView.ViewHolder(itemView) {
 
-        val image : ImageView = itemView.findViewById(R.id.image)
-        val nickname : TextView = itemView.findViewById(R.id.nickname)
-        val title : TextView = itemView.findViewById(R.id.title)
+        val image: ImageView = itemView.findViewById(R.id.image)
+        val nickname: TextView = itemView.findViewById(R.id.nickname)
+        val title: TextView = itemView.findViewById(R.id.title)
 
-        val location : TextView = itemView.findViewById(R.id.location)
-        val timestamp : TextView = itemView.findViewById(R.id.timestamp)
-        val price : TextView = itemView.findViewById(R.id.price)
-        val likeCount : TextView = itemView.findViewById(R.id.likeCount)
-        val viewCount : TextView = itemView.findViewById(R.id.viewCount)
-        val btnToPost : Button = itemView.findViewById(R.id.btnToPost)
+        val location: TextView = itemView.findViewById(R.id.location)
+        val timestamp: TextView = itemView.findViewById(R.id.timestamp)
+        val price: TextView = itemView.findViewById(R.id.price)
+        val likeCount: TextView = itemView.findViewById(R.id.likeCount)
+        //val viewCount: TextView = itemView.findViewById(R.id.viewCount)
 
         // onBindViewHolder에서 호출
         fun bind(item: Post) {
-            var path : String = item.imageUrl.toString()
+            var path: String = item.imageUrl.toString()
             var storage = Firebase.storage
             var gsRef = storage.getReferenceFromUrl(path)
 
@@ -88,17 +90,27 @@ class ListAdapter(): RecyclerView.Adapter<ViewHolder>() {
             timestamp.text = item.timestamp.toString()   // 시간
             price.text = item.price.toString()           // 가격
             likeCount.text = item.likeCount.toString()   // 좋아요 수
-            viewCount.text = item.viewCount.toString()   // 조회수
+            //viewCount.text = item.viewCount.toString()   // 조회수
             // location.text = item.location             // 장소
-            // category.text = item.category             // 카테고리
-
-            btnToPost.setOnClickListener {
-                var intent = Intent(itemView.context, PostActivity::class.java)
-                intent.putExtra("intent-post", item)
-                ContextCompat.startActivity(itemView.context, intent, null)
-
-                Log.d("로그", "viewHolder -> init")
+            // category.text = item.category
+            val pos = adapterPosition
+            if(pos!= RecyclerView.NO_POSITION)
+            {
+                itemView.setOnClickListener {
+                    listener?.onItemClick(itemView,item,pos)
+                }
             }
+/*            itemView.setOnClickListener {
+                Intent(mContext, PostActivity::class.java).apply{
+                    putExtra("data", item)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }.run { mContext?.startActivity(this) }
+            }*/
         }
     }
+
+
 }
+
+
+
