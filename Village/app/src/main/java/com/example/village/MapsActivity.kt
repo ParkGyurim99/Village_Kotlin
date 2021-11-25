@@ -8,6 +8,7 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -23,14 +24,21 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.village.databinding.ActivityMapsBinding
+import com.example.village.model.Post
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+    private var items = listOf<Post>(
+        Post("1", "1", "nickname1", "url1", "item1", "category", "location", 1, 1000, "body1", 0, 0),
+        Post("2", "2", "nickname2", "url2", "item2", "category", "location", 1, 1000, "body1", 0, 0),
+        Post("3", "3", "nickname3", "url3", "item3", "category", "location", 1, 1000, "body1", 0, 0)
+    )
+    private var locations = listOf<LatLng>(LatLng(35.887556, 128.612727), LatLng(35.886083, 128.612524), LatLng(35.885092, 128.613795))
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private var now = LatLng(35.809119433349444, 128.53158175490842)
+    private var now = LatLng(35.886108, 128.613053)
     private var currentMarker : Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +48,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var btn = findViewById<Button>(R.id.button1)
+        var btn = findViewById<ImageButton>(R.id.imageButton1)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -69,15 +77,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // 아이템 리스트
-        val item1 = LatLng(35.806718, 128.532539)
-        val item2 = LatLng(35.808141, 128.531040)
-        val item3 = LatLng(35.807473, 128.532172)
-
-        //mMap.addMarker(MarkerOptions().position(now).title("My Location"))
-        mMap.addMarker(MarkerOptions().position(item1).title("Item 1"))
-        mMap.addMarker(MarkerOptions().position(item2).title("Item 2"))
-        mMap.addMarker(MarkerOptions().position(item3).title("Item 3"))
+        for (i in 0..2) { mMap.addMarker(MarkerOptions().position(locations[i]).title("Item")) } // items.title
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(now, 18.0f))
     }
