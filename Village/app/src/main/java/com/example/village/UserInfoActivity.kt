@@ -32,6 +32,7 @@ class UserInfoActivity : AppCompatActivity() {
     lateinit var UserInfoAdress : EditText
     lateinit var UserInfoReviseBtn : Button
     lateinit var UserProfileImage : ImageView
+    lateinit var logOutBtnImg : ImageView
     val Gallery = 0
     var uriPhoto : Uri? = null
 
@@ -45,6 +46,7 @@ class UserInfoActivity : AppCompatActivity() {
         UserInfoAdress = findViewById<EditText>(R.id.UserInfoAdress)
         UserProfileImage = findViewById(R.id.profileImageView)
         UserInfoReviseBtn = findViewById<Button>(R.id.UserInfoReviseBtn)
+        logOutBtnImg = findViewById<ImageView>(R.id.logOutBtnImg)
         //Initialize Firebase Storage
         auth = Firebase.auth
         fbFirestore = FirebaseFirestore.getInstance()
@@ -61,6 +63,15 @@ class UserInfoActivity : AppCompatActivity() {
         }
         UserInfoReviseBtn.setOnClickListener {
             uploadUserInfo(userInfo)
+        }
+        logOutBtnImg.setOnClickListener {
+            val intent = Intent(this,LoginActivity::class.java)
+            if(auth?.currentUser != null) {
+                auth?.signOut()
+                startActivity(intent)
+            }else{
+                startActivity(intent)
+            }
         }
 
     }

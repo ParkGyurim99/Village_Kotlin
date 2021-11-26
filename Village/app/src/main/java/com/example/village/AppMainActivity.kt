@@ -64,7 +64,6 @@ class AppMainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         btn_signOut.setOnClickListener {
-            println("hi");
             val intent = Intent(this,LoginActivity::class.java)
             println(auth.currentUser)
             if(auth.currentUser != null) {
