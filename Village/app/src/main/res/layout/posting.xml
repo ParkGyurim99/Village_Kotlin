@@ -36,138 +36,174 @@
     </LinearLayout>
 
     <!-- 글 내용 (제품 상세) -->
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh_2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="20">
+        android:layout_weight="9">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="9">
 
-            <ImageView
-                android:id="@+id/ivGoods_p"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:src="@drawable/btn_heart"/>
-
-            <!-- 판매자, 위치 정보 -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="horizontal"
-                android:background="@drawable/borderline">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/ivProfile"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@android:color/transparent"
-                    android:padding="0dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/profile_sample"/>
+                    android:id="@+id/ivGoods_p"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:scaleType="fitCenter"/>
+
+                <!-- 판매자, 위치 정보 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/borderline">
+
+                    <ImageView
+                        android:id="@+id/ivProfile"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@android:color/transparent"
+                        android:padding="0dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/profile_sample"/>
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:text="레오 집사"
+                        android:textSize="20sp"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="20dp"
+                        android:text="북구 대현동"/>
+                </LinearLayout>
+
+                <!-- 제목, 좋아요, 조회수 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:text="글 제목"
+                        android:textSize="18sp"
+                        android:lineSpacingMultiplier="1.2"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:text="좋아요"/>
+
+                    <TextView
+                        android:id="@+id/tvLikes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="30dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:text="조회수"/>
+
+                    <TextView
+                        android:id="@+id/tvViews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="20dp"/>
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvName"
+                    android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:text="레오 집사"
-                    android:textSize="20sp"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:id="@+id/tvLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="20dp"
-                    android:text="북구 대현동"/>
-            </LinearLayout>
-
-            <!-- 제목, 좋아요, 조회수 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:text="글 제목"
-                    android:textSize="18sp"
+                    android:text="YYYY/MM/DD, HH:MM"
+                    android:paddingLeft="20dp"
                     android:lineSpacingMultiplier="1.2"/>
 
-                <View
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/tvCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="카테고리"
+                    android:lineSpacingMultiplier="1.2"/>
+
+                <TextView
+                    android:id="@+id/tvBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:text="본문 내용"
+                    android:lineSpacingMultiplier="1.2"/>
+
+                <!-- 댓글 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/etComment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"/>
+
+                    <Button
+                        android:id="@+id/btnWriteComment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:text="작성하기"/>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_2"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:text="좋아요"/>
-
-                <TextView
-                    android:id="@+id/tvLikes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="30dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:text="조회수"/>
-
-                <TextView
-                    android:id="@+id/tvViews"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_weight="1">
+                </androidx.recyclerview.widget.RecyclerView>
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="YYYY/MM/DD, HH:MM"
-                android:paddingLeft="20dp"
-                android:lineSpacingMultiplier="1.2"/>
-
-            <TextView
-                android:id="@+id/tvCategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:text="카테고리"
-                android:lineSpacingMultiplier="1.2"/>
-
-            <TextView
-                android:id="@+id/tvBody"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:text="본문 내용"
-                android:lineSpacingMultiplier="1.2"/>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- 찜하기 & 하단 가격 정보 & 채팅 버튼 -->
     <LinearLayout

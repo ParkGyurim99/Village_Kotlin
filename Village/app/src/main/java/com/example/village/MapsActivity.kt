@@ -28,9 +28,9 @@ import com.example.village.model.Post
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var items = listOf<Post>(
-        Post("1", "1", "nickname1", "url1", "item1", "category", "location", 1, 1000, "body1", 0, 0),
-        Post("2", "2", "nickname2", "url2", "item2", "category", "location", 1, 1000, "body1", 0, 0),
-        Post("3", "3", "nickname3", "url3", "item3", "category", "location", 1, 1000, "body1", 0, 0)
+        Post("1", "1", "nickname1", "url1", "item1", "category", "location", 1, "12:00", 5000, "body1", 0),
+        Post("2", "2", "nickname2", "url2", "item2", "category", "location", 1, "10:00", 9900, "body2", 0),
+        Post("3", "3", "nickname3", "url3", "item3", "category", "location", 1, "09:00", 8000, "body3", 0)
     )
     private var locations = listOf<LatLng>(LatLng(35.887556, 128.612727), LatLng(35.886083, 128.612524), LatLng(35.885092, 128.613795))
 

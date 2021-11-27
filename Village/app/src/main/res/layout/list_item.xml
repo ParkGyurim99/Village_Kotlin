@@ -41,7 +41,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="6dp"
                 android:hint="닉네임"
-                app:layout_constraintBottom_toTopOf="@+id/timestamp"
+                app:layout_constraintBottom_toTopOf="@+id/time"
                 app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
@@ -53,7 +53,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
                 android:hint="제목"
-                app:layout_constraintBottom_toTopOf="@+id/timestamp"
+                app:layout_constraintBottom_toTopOf="@+id/time"
                 app:layout_constraintStart_toEndOf="@+id/nickname"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
@@ -71,7 +71,7 @@
                 app:layout_constraintVertical_bias="0.394" />
 
             <TextView
-                android:id="@+id/timestamp"
+                android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"

@@ -95,6 +95,7 @@ class AppMainActivity : AppCompatActivity() {
             override fun onItemClick(v: View, data: Post, pos : Int) {
                 Intent(this@AppMainActivity, PostActivity::class.java).apply {
                     putExtra("user-posts", data)
+                    putExtra("pid", pos)
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }.run { startActivity(this) }
             }

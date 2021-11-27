@@ -147,6 +147,10 @@ class WriteActivity : AppCompatActivity() {
         imageRef?.putFile(imageUri!!).addOnSuccessListener {
             var newPost = Post()
 
+            val long_now = System.currentTimeMillis()
+            val t_date = Date(long_now)     // 현재 시간을 Date 타입으로 변환
+            val t_dateFormat = SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale("ko", "KR"))
+
             // 닉네임과 uid도 같이 저장
             newPost.nickname = nickname
             newPost.uid = uid
@@ -156,6 +160,7 @@ class WriteActivity : AppCompatActivity() {
             newPost.price = price
             newPost.body = body
             newPost.timestamp = System.currentTimeMillis()
+            newPost.time = t_dateFormat.format(t_date)
 
             database.collection("user-posts")
                 .add(newPost)

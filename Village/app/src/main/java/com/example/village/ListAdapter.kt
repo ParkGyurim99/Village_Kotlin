@@ -61,7 +61,7 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val title: TextView = itemView.findViewById(R.id.title)
 
         val location: TextView = itemView.findViewById(R.id.location)
-        val timestamp: TextView = itemView.findViewById(R.id.timestamp)
+        val time: TextView = itemView.findViewById(R.id.time)
         val price: TextView = itemView.findViewById(R.id.price)
         val likeCount: TextView = itemView.findViewById(R.id.likeCount)
         //val viewCount: TextView = itemView.findViewById(R.id.viewCount)
@@ -87,10 +87,10 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             // list_item.xml에 저장만 할 데이터
             // uid.text = item.uid                       // uid
-            timestamp.text = item.timestamp.toString()   // 시간
-            price.text = item.price.toString()           // 가격
+            time.text = item.timestamp.toString()        // 시간
+            price.text = item.price.toString() + "원"     // 가격
             likeCount.text = item.likeCount.toString()   // 좋아요 수
-            //viewCount.text = item.viewCount.toString()   // 조회수
+            //viewCount.text = item.viewCount.toString() // 조회수
             // location.text = item.location             // 장소
             // category.text = item.category
             val pos = adapterPosition
@@ -100,17 +100,6 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     listener?.onItemClick(itemView,item,pos)
                 }
             }
-/*            itemView.setOnClickListener {
-                Intent(mContext, PostActivity::class.java).apply{
-                    putExtra("data", item)
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }.run { mContext?.startActivity(this) }
-            }*/
         }
     }
-
-
 }
-
-
-
