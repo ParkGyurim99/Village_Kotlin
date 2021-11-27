@@ -1,6 +1,7 @@
 package com.example.village
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,14 +9,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.village.model.Post
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var postList = mutableListOf<Post>()
+    private var searchList : ArrayList<Post> = arrayListOf()
     private var mContext: Context? = null
-
+    var firestore : FirebaseFirestore? = null
     interface OnItemClickListener{
         fun onItemClick(v:View, data: Post, pos: Int)
     }
@@ -28,13 +31,22 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         postList = data
     }
 
-    // 아이템 레이아웃과 결합
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
-            ListAdapter.ViewHolder {
-        mContext = parent.context
+    init {  // searchList의 문서를 불러온 뒤 Person으로 변환해 ArrayList에 담음
+        firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            // ArrayList 비워줌
+            searchList.clear()
 
+            for (snapshot in querySnapshot!!.documents) {
+                var item = snapshot.toObject(Post::class.java)
+                searchList.add(item!!)
+            }
+            notifyDataSetChanged()
+        }
+    }
+    // 아이템 레이아웃과 결합
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ViewHolder {
+        mContext = parent.context
         val view = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false)
-        //val view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
         return ViewHolder(view)
     }
 
@@ -50,7 +62,6 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int {
         return postList.size
     }
-
     // onCreateViewHolder에서 만든 view와 실제 데이터를 연결
     // 레이아웃 내 View 연결
     inner class ViewHolder(itemView: View)  // itemView는 list_item.xml
@@ -100,6 +111,22 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     listener?.onItemClick(itemView,item,pos)
                 }
             }
+        }
+    }
+    fun search(serachWord : String, option : String) {
+        Log.d("search","#################")
+        firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            // ArrayList 비워줌
+            searchList.clear()
+            for (snapshot in querySnapshot!!.documents) {
+                Log.d("for","#################")
+                if (snapshot.getString(option)!!.contains(serachWord)) {
+                    Log.d("if","#################")
+                    var item = snapshot.toObject(Post::class.java)
+                    searchList.add(item!!)
+                }
+            }
+            notifyDataSetChanged()
         }
     }
 }
