@@ -202,7 +202,7 @@ class UserInfoActivity : AppCompatActivity() {
     }
     private fun goLoginActivity(){
         val intent = Intent(this,LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // history 지워서 로그인 페이지로 보내
         startActivity(intent)
         finish()
     }
