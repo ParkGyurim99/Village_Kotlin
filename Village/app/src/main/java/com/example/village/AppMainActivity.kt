@@ -26,6 +26,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class AppMainActivity : AppCompatActivity() {
+
     private lateinit var binding : ActivityAppMainBinding
     var firestore : FirebaseFirestore? = null
     val db = FirebaseFirestore.getInstance()
@@ -37,18 +38,20 @@ class AppMainActivity : AppCompatActivity() {
     private val viewModel by lazy { ViewModelProvider(this).get(ListViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivityAppMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         auth = Firebase.auth
+        
+        checkUser(auth)
+
         val btn_map : ImageView = findViewById<ImageView>(R.id.btn_map)
         val btn_search : Button = findViewById<Button>(R.id.btn_search)
         val searchWord : EditText = findViewById<EditText>(R.id.searchWord)
         val btn_write : Button = findViewById<Button>(R.id.btn_write)
-        val btn_signOut: Button = findViewById<Button>(R.id.btn_signOut)
         val btn_userInfo : Button = findViewById<Button>(R.id.btn_userInfo)
-
 
         var searchOption = "name"
         // val recyclerView : RecyclerView = findViewById(R.id.recyclerview)
@@ -63,14 +66,7 @@ class AppMainActivity : AppCompatActivity() {
             val intent = Intent(this, WriteActivity::class.java)
             startActivity(intent)
         }
-        btn_signOut.setOnClickListener {
-            val intent = Intent(this,LoginActivity::class.java)
-            println(auth.currentUser)
-            if(auth.currentUser != null) {
-                auth.signOut()
-            }
-            startActivity(intent)
-        }
+
         btn_userInfo.setOnClickListener {
             val intent = Intent(this,UserInfoActivity::class.java)
             startActivity(intent)
@@ -239,4 +235,15 @@ class AppMainActivity : AppCompatActivity() {
             }
         }
     }*/
+    private fun checkUser(auth: FirebaseAuth?){
+        if(auth?.currentUser == null){
+            auth?.signOut()
+            goLoginActivity()
+        }
+    }
+    private fun goLoginActivity(){
+        val intent = Intent(this,LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }

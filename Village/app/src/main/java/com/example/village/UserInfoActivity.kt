@@ -55,7 +55,6 @@ class UserInfoActivity : AppCompatActivity() {
         var userInfo : UserModel = UserModel()
 
         checkUser(auth)
-        println(auth?.currentUser?.uid)
         getUserInfoFromFS(auth!!,userInfo)
 
         UserProfileImage.setOnClickListener {
@@ -68,9 +67,9 @@ class UserInfoActivity : AppCompatActivity() {
             val intent = Intent(this,LoginActivity::class.java)
             if(auth?.currentUser != null) {
                 auth?.signOut()
-                startActivity(intent)
+                goLoginActivity()
             }else{
-                startActivity(intent)
+                goLoginActivity()
             }
         }
 
@@ -203,7 +202,9 @@ class UserInfoActivity : AppCompatActivity() {
     }
     private fun goLoginActivity(){
         val intent = Intent(this,LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+        finish()
     }
     private fun setDialog() : Triple<AlertDialog,TextView,TextView>{
         //set Dialog
