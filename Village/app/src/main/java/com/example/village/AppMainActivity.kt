@@ -47,10 +47,10 @@ class AppMainActivity : AppCompatActivity() {
         checkUser(auth)
 
         val btn_map : ImageView = findViewById<ImageView>(R.id.btn_map)
-        val btn_search : Button = findViewById<Button>(R.id.btn_search)
+        val btn_search : ImageButton = findViewById<ImageButton>(R.id.btn_search)
         var searchWord : EditText = findViewById<EditText>(R.id.searchWord)
-        val btn_write : Button = findViewById<Button>(R.id.btn_write)
-        val btn_userInfo : Button = findViewById<Button>(R.id.btn_userInfo)
+        val btn_write : ImageButton = findViewById<ImageButton>(R.id.btn_write)
+        val btn_userInfo : ImageButton = findViewById<ImageButton>(R.id.btn_userInfo)
 
         var searchOption = "title"
         // val recyclerView : RecyclerView = findViewById(R.id.recyclerview)
@@ -58,8 +58,7 @@ class AppMainActivity : AppCompatActivity() {
             val intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
         }
-        btn_search.setOnClickListener {
-            Log.d("btn_search","#################")
+        binding.btnSearch.setOnClickListener {
             (recyclerView.adapter as ListAdapter).search(searchWord.text.toString(), searchOption)
         }
         btn_write.setOnClickListener {

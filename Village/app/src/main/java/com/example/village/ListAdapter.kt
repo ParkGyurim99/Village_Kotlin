@@ -10,15 +10,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.village.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var postList = mutableListOf<Post>()
-    private var searchList : ArrayList<Post> = arrayListOf()
     private var mContext: Context? = null
     var firestore : FirebaseFirestore? = null
+
     interface OnItemClickListener{
         fun onItemClick(v:View, data: Post, pos: Int)
     }
@@ -32,13 +33,14 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     init {  // searchList의 문서를 불러온 뒤 Person으로 변환해 ArrayList에 담음
+        firestore = FirebaseFirestore.getInstance()
         firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             // ArrayList 비워줌
-            searchList.clear()
+            postList.clear()
 
             for (snapshot in querySnapshot!!.documents) {
                 var item = snapshot.toObject(Post::class.java)
-                searchList.add(item!!)
+                postList.add(item!!)
             }
             notifyDataSetChanged()
         }
@@ -68,7 +70,6 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         : RecyclerView.ViewHolder(itemView) {
 
         val image: ImageView = itemView.findViewById(R.id.image)
-        val nickname: TextView = itemView.findViewById(R.id.nickname)
         val title: TextView = itemView.findViewById(R.id.title)
 
         val location: TextView = itemView.findViewById(R.id.location)
@@ -91,9 +92,8 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .into(image)
                 }
             }
-
             // 일단 list_item.xml에 표시될 데이터
-            nickname.text = item.nickname                // 이름
+            //nickname.text = item.nickname                // 이름
             title.text = item.title                      // 제목
 
             // list_item.xml에 저장만 할 데이터
@@ -114,16 +114,14 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
     fun search(serachWord : String, option : String) {
-        Log.d("search","#################")
+        firestore = FirebaseFirestore.getInstance()
         firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             // ArrayList 비워줌
-            searchList.clear()
+            postList.clear()
             for (snapshot in querySnapshot!!.documents) {
-                Log.d("for","#################")
                 if (snapshot.getString(option)!!.contains(serachWord)) {
-                    Log.d("if","#################")
                     var item = snapshot.toObject(Post::class.java)
-                    searchList.add(item!!)
+                    postList.add(item!!)
                 }
             }
             notifyDataSetChanged()
