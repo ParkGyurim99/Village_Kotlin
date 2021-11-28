@@ -15,7 +15,8 @@
         app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/posting_rectangle">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/comment_list_layout"
@@ -25,7 +26,7 @@
             <ImageView
                 android:id="@+id/comment_image"
                 android:layout_width="50dp"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
@@ -33,7 +34,8 @@
                 android:src="@drawable/ic_launcher_background"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/posting_crop_image"/>
 
             <TextView
                 android:id="@+id/comment_nickname"

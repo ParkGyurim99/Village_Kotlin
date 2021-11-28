@@ -39,18 +39,20 @@
         />
 
     <ImageButton
+        android:id="@+id/imageButton1"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/imageButton1"
-        android:padding="0dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/btn_currentlocation"
         android:background="@android:color/transparent"
-        />
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/btn_currentlocation" />
 
     <!--    <TextView-->
     <!--        android:layout_width="400dp"-->
@@ -64,16 +66,15 @@
     <!--        android:text="Item Info" />-->
 
     <include
-        layout="@layout/list_item"
         android:id="@+id/maps_iteminfo"
+        layout="@layout/list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="2sp"
         android:layout_marginRight="2sp"
-        android:elevation="10dp"
         android:layout_marginBottom="20dp"
-        />
+        android:elevation="10dp" />
 
 
 </RelativeLayout>

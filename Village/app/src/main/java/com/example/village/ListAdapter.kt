@@ -45,10 +45,13 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             notifyDataSetChanged()
         }
     }
+
     // 아이템 레이아웃과 결합
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ViewHolder {
         mContext = parent.context
+
         val view = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false)
+
         return ViewHolder(view)
     }
 
@@ -64,12 +67,14 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int {
         return postList.size
     }
+
     // onCreateViewHolder에서 만든 view와 실제 데이터를 연결
     // 레이아웃 내 View 연결
     inner class ViewHolder(itemView: View)  // itemView는 list_item.xml
         : RecyclerView.ViewHolder(itemView) {
 
         val image: ImageView = itemView.findViewById(R.id.image)
+        //val nickname: TextView = itemView.findViewById(R.id.nickname)
         val title: TextView = itemView.findViewById(R.id.title)
 
         val location: TextView = itemView.findViewById(R.id.location)
@@ -92,15 +97,16 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .into(image)
                 }
             }
-            // 일단 list_item.xml에 표시될 데이터
-            //nickname.text = item.nickname                // 이름
-            title.text = item.title                      // 제목
 
-            // list_item.xml에 저장만 할 데이터
-            // uid.text = item.uid                       // uid
+            // 일단 list_item.xml에 표시될 데이터
+            title.text = item.title                      // 제목
             time.text = item.timestamp.toString()        // 시간
             price.text = item.price.toString() + "원"     // 가격
             likeCount.text = item.likeCount.toString()   // 좋아요 수
+
+            // list_item.xml에 저장만 할 데이터
+            // uid.text = item.uid                       // uid
+            // nickname.text = item.nickname             // 이름
             //viewCount.text = item.viewCount.toString() // 조회수
             // location.text = item.location             // 장소
             // category.text = item.category
@@ -113,6 +119,7 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
         }
     }
+
     fun search(serachWord : String, option : String) {
         firestore = FirebaseFirestore.getInstance()
         firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->

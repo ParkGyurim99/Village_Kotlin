@@ -4,12 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 맨 처음 툴바(비슷하게 구현한 것) -->
+    <!-- 상단 바 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@drawable/borderline">
+        android:layout_height="64dp"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btnReturn"
@@ -28,7 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
+            android:fontFamily="@font/inter_bold"
             android:text="글 작성하기"
+            android:textColor="#212325"
             android:textSize="20sp"/>
 
         <View
@@ -41,8 +42,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginRight="20dp"
-            android:text="완료"/>
+            android:fontFamily="@font/inter_bold"
+            android:text="완료"
+            android:textColor="#91919F"
+            android:textSize="20sp"
+            style="?android:borderlessButtonStyle"/>
     </LinearLayout>
 
     <!-- 글 내용 (제품 상세) -->
@@ -64,22 +68,24 @@
 
                 <ImageButton
                     android:id="@+id/btnUploadPic"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="20dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/btn_camera"/>
+                    android:padding="10dp"
+                    android:src="@drawable/btn_camera"
+                    android:background="@drawable/writing_border_square"/>
 
                 <ImageView
                     android:id="@+id/ivGoods_w"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="30dp"
-                    android:background="@android:color/transparent"
                     android:padding="0dp"
-                    android:scaleType="fitCenter"/>
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/writing_border_square"/>
             </LinearLayout>
 
             <EditText
@@ -88,17 +94,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/inter_regular"
+                android:paddingLeft="20dp"
                 android:hint="제목"
-                android:textSize="20sp"/>
+                android:textColor="#91919F"
+                android:textSize="20sp"
+                android:background="@drawable/writing_border_input_field_1"/>
 
-            <!-- 메뉴 선택 되면 텍스트도 바뀌게 -->
+            <!-- 카테고리 메뉴 선택 되면 텍스트도 바뀌게 -->
             <Button
                 android:id="@+id/btnCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:text="카테고리"/>
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:text="카테고리"
+                android:textColor="#91919F"
+                android:textSize="20sp"
+                android:background="@drawable/writing_border_button"/>
 
             <EditText
                 android:id="@+id/etPrice"
@@ -106,8 +124,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:hint="가격"
-                android:textSize="20sp"/>
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/inter_regular"
+                android:paddingLeft="20dp"
+                android:hint="￦   가격"
+                android:textColor="#91919F"
+                android:textSize="20sp"
+                android:background="@drawable/writing_border_input_field_1"/>
 
             <EditText
                 android:id="@+id/etBody"
@@ -115,11 +138,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingBottom="280dp"
+                android:fontFamily="@font/inter_regular"
                 android:hint="게시글 내용"
-                android:textSize="20sp"/>
+                android:textColor="#91919F"
+                android:textSize="20sp"
+                android:background="@drawable/writing_border_input_field_2"/>
 
             <!-- 판매자, 위치 정보 (테스트용으로 적어보기) -->
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:orientation="horizontal"
@@ -137,21 +166,6 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/profile_sample"/>
 
-                <!--
-                <EditText
-                    android:id="@+id/test_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:hint="이름"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-                -->
-
                 <EditText
                     android:id="@+id/test_location"
                     android:layout_width="wrap_content"
@@ -159,7 +173,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="20dp"
                     android:hint="장소"/>
-            </LinearLayout>
+            </LinearLayout>-->
         </LinearLayout>
     </ScrollView>
 

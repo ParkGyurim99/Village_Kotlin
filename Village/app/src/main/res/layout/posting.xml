@@ -4,15 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- 맨 처음 툴바(비슷하게 구현한 것) -->
+    <!-- 상단 바 -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="@drawable/borderline">
+        android:layout_height="64dp"
+        android:orientation="horizontal">
 
         <ImageButton
-            android:id="@id/btnReturn"
+            android:id="@+id/btnReturn"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
@@ -32,7 +31,7 @@
             android:background="@android:color/transparent"
             android:padding="0dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/btn_home"/>
+            android:src="@drawable/ic_home"/>
     </LinearLayout>
 
     <!-- 글 내용 (제품 상세) -->
@@ -42,7 +41,7 @@
         android:layout_height="0dp"
         android:layout_weight="9">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="9">
@@ -55,15 +54,24 @@
                 <ImageView
                     android:id="@+id/ivGoods_p"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:scaleType="fitCenter"/>
+                    android:layout_height="280dp"
+                    android:scaleType="centerCrop"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="-24dp"
+                    android:background="@drawable/posting_crop_image"/>
 
                 <!-- 판매자, 위치 정보 -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/borderline">
+                    android:layout_height="71dp"
+                    android:layout_marginTop="-40dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="center"
+                    android:background="@drawable/posting_rectangle"
+                    android:elevation="10dp">
 
                     <ImageView
                         android:id="@+id/ivProfile"
@@ -72,10 +80,10 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:background="@android:color/transparent"
                         android:padding="0dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/profile_sample"/>
+                        android:src="@drawable/profile_sample"
+                        android:background="@drawable/posting_crop_image"/>
 
                     <TextView
                         android:id="@+id/tvName"
@@ -83,13 +91,15 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="#91919F"
                         android:text="레오 집사"
-                        android:textSize="20sp"/>
+                        android:textSize="18sp" />
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/tvLocation"
@@ -97,23 +107,37 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginRight="20dp"
-                        android:text="북구 대현동"/>
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="#91919F"
+                        android:text="북구 대현동"
+                        android:textSize="18sp"/>
                 </LinearLayout>
 
-                <!-- 제목, 좋아요, 조회수 -->
+                <!-- 점선 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/posting_line"
+                    android:layout_margin="20dp"/>
+
+                <!-- 글 제목, 가격, 좋아요 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
 
                     <TextView
                         android:id="@+id/tvTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="20dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="#91919F"
                         android:text="글 제목"
-                        android:textSize="18sp"
-                        android:lineSpacingMultiplier="1.2"/>
+                        android:textSize="18sp"/>
 
                     <View
                         android:layout_width="0dp"
@@ -121,70 +145,97 @@
                         android:layout_weight="1"/>
 
                     <TextView
+                        android:id="@+id/tvPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
-                        android:text="좋아요"/>
+                        android:layout_marginRight="30dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="#91919F"
+                        android:text="35000원"
+                        android:textSize="18sp"/>
 
-                    <TextView
-                        android:id="@+id/tvLikes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="30dp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <ImageButton
+                        android:id="@+id/btnHeart"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:layout_marginRight="10dp"
-                        android:text="조회수"/>
-
-                    <TextView
-                        android:id="@+id/tvViews"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="20dp"/>
+                        android:layout_marginRight="20dp"
+                        android:background="@android:color/transparent"
+                        android:padding="0dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/btn_heart_empty"/>
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="YYYY/MM/DD, HH:MM"
-                    android:paddingLeft="20dp"
-                    android:lineSpacingMultiplier="1.2"/>
 
                 <TextView
                     android:id="@+id/tvCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:paddingLeft="20dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:textColor="#91919F"
                     android:text="카테고리"
-                    android:lineSpacingMultiplier="1.2"/>
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="20dp"
+                    android:paddingLeft="20dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:textColor="#91919F"
+                    android:text="2021/11/28 04:07"
+                    android:textAlignment="center"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tvBody"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="20dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:textColor="#212325"
                     android:text="본문 내용"
-                    android:lineSpacingMultiplier="1.2"/>
+                    android:lineSpacingMultiplier="1.2"
+                    android:textSize="15sp"/>
+
+                <!-- 점선 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/posting_line"
+                    android:layout_margin="20dp"/>
 
                 <!-- 댓글 -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="60dp"
+                    android:orientation="horizontal"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginHorizontal="10dp"
+                    android:gravity="center"
+                    android:background="@drawable/posting_rectangle"
+                    android:elevation="10dp">
 
                     <EditText
                         android:id="@+id/etComment"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:paddingLeft="10dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:hint="댓글 작성"
+                        android:textColor="#91919F"
+                        android:textSize="18sp"
+                        android:background="@android:color/transparent"/>
 
                     <Button
                         android:id="@+id/btnWriteComment"
@@ -192,61 +243,30 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:layout_marginLeft="10dp"
-                        android:text="작성하기"/>
+                        android:fontFamily="@font/inter_regular"
+                        android:text="완료"
+                        android:textSize="18dp"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/posting_button"/>
                 </LinearLayout>
 
+                <!-- 점선 -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/posting_line"
+                    android:layout_margin="20dp"/>
+
+                <!-- 댓글 -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView_2"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:overScrollMode="never">
                 </androidx.recyclerview.widget.RecyclerView>
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <!-- 찜하기 & 하단 가격 정보 & 채팅 버튼 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="horizontal"
-        android:background="@drawable/borderline">
-
-        <!-- 클릭 시 채워진 하트로 변하게 -->
-        <ImageButton
-            android:id="@+id/btnHeart"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@android:color/transparent"
-            android:padding="0dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/btn_heart_empty"/>
-
-        <TextView
-            android:id="@+id/tvPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:text="34,000원"
-            android:textSize="20sp"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btnChat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="20dp"
-            android:text="채팅하기"/>
-    </LinearLayout>
-
 </LinearLayout>

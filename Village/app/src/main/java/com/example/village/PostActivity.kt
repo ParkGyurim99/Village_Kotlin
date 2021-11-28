@@ -1,12 +1,14 @@
 package com.example.village
 
 import android.content.Intent
+import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,8 +30,8 @@ class PostActivity : AppCompatActivity() {
     lateinit var tvName : TextView
     lateinit var tvLocation : TextView
     lateinit var tvTitle : TextView
-    lateinit var tvLikes : TextView
-    lateinit var tvViews : TextView
+    //lateinit var tvLikes : TextView
+    //lateinit var tvViews : TextView
     lateinit var tvTime : TextView
     lateinit var tvCategory : TextView
     lateinit var tvBody : TextView
@@ -52,12 +54,13 @@ class PostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.posting)
+
         ivGoods_p = findViewById(R.id.ivGoods_p)
         tvName = findViewById(R.id.tvName)
         tvLocation = findViewById(R.id.tvLocation)
         tvTitle = findViewById(R.id.tvTitle)
-        tvLikes = findViewById(R.id.tvLikes)
-        tvViews = findViewById(R.id.tvViews)
+        //tvLikes = findViewById(R.id.tvLikes)
+        //tvViews = findViewById(R.id.tvViews)
         tvTime = findViewById(R.id.tvTime)
         tvName = findViewById(R.id.tvName)
         tvCategory = findViewById(R.id.tvCategory)
@@ -80,6 +83,9 @@ class PostActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // 이미지 테두리 둥그래지는지 테스트
+        var ivProfile = findViewById<ImageView>(R.id.ivProfile)
+        ivProfile.clipToOutline = true
 
         /* 글 내용 표시 */
         val intentPost = intent.getSerializableExtra("user-posts") as Post
@@ -98,13 +104,15 @@ class PostActivity : AppCompatActivity() {
             }
         }
 
+        ivGoods_p.clipToOutline = true
+
         tvName.text = intentPost.nickname                   // 이름
         tvTitle.text = intentPost.title                     // 제목
         tvTime.text = intentPost.time.toString()            // 시간
         tvPrice.text = intentPost.price.toString() + "원"   // 가격
-        tvLikes.text = intentPost.likeCount.toString()      // 좋아요 수
-        tvViews.text = intentPost.viewCount.toString()      // 조회수
         tvBody.text = intentPost.body.toString()            // 내용
+        //tvLikes.text = intentPost.likeCount.toString()    // 좋아요 수
+        //tvViews.text = intentPost.viewCount.toString()    // 조회수
         // tvLocation.text = intentPost.location            // 장소
         // tvCategory.text = intentPost.category            // 카테고리
 
@@ -164,6 +172,7 @@ class PostActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)  // 리사이클러 뷰 방향 등을 설정
         recyclerView.adapter = adapter  // 어댑터 장착
+        recyclerView.isNestedScrollingEnabled = false   // 리사이클러뷰의 스크롤을 없앰
         observerData()
 
         // 리사이클러 뷰 새로고침
@@ -173,7 +182,7 @@ class PostActivity : AppCompatActivity() {
             recyclerView.adapter = adapter
             observerData()
 
-            swipeRefresh.isRefreshing = false   // 새로고침
+            swipeRefresh.isRefreshing = false   // 새로고침 (왜 안 뜨지)
         }
     }
 

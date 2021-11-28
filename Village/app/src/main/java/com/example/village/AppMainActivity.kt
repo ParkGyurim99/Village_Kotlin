@@ -40,6 +40,7 @@ class AppMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAppMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         recyclerView.adapter = ListAdapter()
         recyclerView.layoutManager = LinearLayoutManager(this)
         auth = Firebase.auth
@@ -58,9 +59,11 @@ class AppMainActivity : AppCompatActivity() {
             val intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
         }
+
         binding.btnSearch.setOnClickListener {
             (recyclerView.adapter as ListAdapter).search(searchWord.text.toString(), searchOption)
         }
+
         btn_write.setOnClickListener {
             val intent = Intent(this, WriteActivity::class.java)
             startActivity(intent)
@@ -89,6 +92,7 @@ class AppMainActivity : AppCompatActivity() {
 
             swipeRefresh.isRefreshing = false   // 새로고침
         }
+
         adapter.setOnItemClickListener(object :
             ListAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: Post, pos : Int) {
@@ -98,7 +102,6 @@ class AppMainActivity : AppCompatActivity() {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }.run { startActivity(this) }
             }
-
         })
     }
 

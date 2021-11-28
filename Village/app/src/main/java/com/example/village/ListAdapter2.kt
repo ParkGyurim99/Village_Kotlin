@@ -16,6 +16,7 @@ class ListAdapter2 : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var mContext: Context? = null
     private var pid: Int? = null
     private var pid_comment_index: Int = 0  // 포스트마다 달린 댓글의 리스트를 참조할 index
+    private var pid_comment_list = ArrayList<Comment>()
 
     interface OnItemClickListener{
         fun onItemClick(v: View, data: Comment, pos: Int)
@@ -45,7 +46,6 @@ class ListAdapter2 : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     // View에 내용 입력
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val comment: Comment = commentList[position]
-        val pid_comment_list = ArrayList<Comment>()
         var viewHolder = (holder as ViewHolder).itemView
         var index: Int = 0
 
@@ -80,7 +80,7 @@ class ListAdapter2 : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    // 리스트 내 아이템 개수
+    // 전체 리스트 내 아이템 개수
     override fun getItemCount(): Int {
         return commentList.size
     }
@@ -109,6 +109,8 @@ class ListAdapter2 : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .into(comment_image)
                 }
             }*/
+
+            comment_image.clipToOutline = true
 
             // uid.text = item.uid                                   // uid
             if (item.pid == pid) {
