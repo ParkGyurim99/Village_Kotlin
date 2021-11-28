@@ -2,11 +2,10 @@ package com.example.village
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
+import android.location.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -25,6 +24,8 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.village.databinding.ActivityMapsBinding
 import com.example.village.model.Post
+import java.io.IOException
+import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var items = listOf<Post>(
@@ -88,7 +89,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var locationListener = object : LocationListener {
             override fun onLocationChanged(p0: Location) {
                 val latLng = LatLng(p0!!.latitude, p0!!.longitude)
-                locationText.setText("현재 위치 - 위도 : ${p0.latitude} / 경도 : ${p0.longitude}")
+//                locationText.setText("현재 위치 - 위도 : ${p0.latitude} / 경도 : ${p0.longitude}")
+                var mGeocoder = Geocoder(applicationContext, Locale.KOREAN)
+                var mResultList : List<Address>? = null
+                try {
+                    //mResultList = mGeocoder.getFromLocation(p0.latitude, p0.longitude, 1)
+                    mResultList = mGeocoder.getFromLocation(locations[0].latitude, locations[0].longitude, 1)
+                } catch (e : IOException) {
+                    e.printStackTrace()
+                }
+                if (mResultList != null) {
+                    Log.d("Check Current Location", mResultList[0].getAddressLine(0))
+                    locationText.setText(mResultList[0].getAddressLine(0).substring(11, 17))
+                }
+
                 // 마커 없을 때 새로 생성
                 if (currentMarker == null) {
                     val markerOptions = MarkerOptions()
