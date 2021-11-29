@@ -76,12 +76,12 @@ class WriteActivity : AppCompatActivity() {
                         for (document in documentSnapshot) {
                             val getData = document.toObject<UserModel>()
 
-                            println(" ")
+                            /*println(" ")
                             println(" ")
                             println("if문 안에 진입 : getData? " + getData.uid)
                             println("if문 안에 진입 : uid? " + uid)
                             println(" ")
-                            println(" ")
+                            println(" ")*/
 
                             if (getData!!.uid.contentEquals(uid)) {
                                 nickname = getData.userName.toString()

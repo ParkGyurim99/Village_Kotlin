@@ -74,7 +74,6 @@
         android:layout_marginLeft="2sp"
         android:layout_marginRight="2sp"
         android:layout_marginBottom="20dp"
-        android:elevation="10dp" />
-
-
+        android:elevation="10dp"
+        android:visibility="gone"/>
 </RelativeLayout>
