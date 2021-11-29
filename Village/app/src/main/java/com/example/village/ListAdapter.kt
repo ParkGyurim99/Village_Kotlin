@@ -13,6 +13,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.android.synthetic.main.list_item.view.*
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -27,7 +31,13 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun setOnItemClickListener(listener : OnItemClickListener) {
         this.listener = listener
     }
-
+    fun toTimeStamp(num: Long) {
+        var sampleDate = "2020-06-14 10:12:14"
+        var sf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        var date = sf.parse(sampleDate)
+        var today = Calendar.getInstance()
+        var calcuDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
+    }
     fun setListData(data: MutableList<Post>) {
         postList = data
     }
@@ -37,7 +47,6 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             // ArrayList 비워줌
             postList.clear()
-
             for (snapshot in querySnapshot!!.documents) {
                 var item = snapshot.toObject(Post::class.java)
                 postList.add(item!!)
@@ -59,7 +68,7 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val post: Post = postList[position]
         var viewHolder = (holder as ViewHolder).itemView
-
+        viewHolder.time.text = postList[position].time
         holder.bind(post)
     }
 
@@ -81,6 +90,10 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val time: TextView = itemView.findViewById(R.id.time)
         val price: TextView = itemView.findViewById(R.id.price)
         val likeCount: TextView = itemView.findViewById(R.id.likeCount)
+
+
+
+
         //val viewCount: TextView = itemView.findViewById(R.id.viewCount)
 
         // onBindViewHolder에서 호출
@@ -88,8 +101,7 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             var path: String = item.imageUrl.toString()
             var storage = Firebase.storage
             var gsRef = storage.getReferenceFromUrl(path)
-
-            // 이미지
+                // 이미지
             gsRef.downloadUrl.addOnCompleteListener {
                 if (it.isSuccessful) {
                     GlideApp.with(itemView)
@@ -97,16 +109,14 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .into(image)
                 }
             }
-
+            item.timestamp
             // 일단 list_item.xml에 표시될 데이터
             title.text = item.title                      // 제목
-            time.text = item.timestamp.toString()        // 시간
+            time.text = item.time.toString()        // 시간
             price.text = item.price.toString() + "원"     // 가격
             likeCount.text = item.likeCount.toString()   // 좋아요 수
 
-            // list_item.xml에 저장만 할 데이터
-            // uid.text = item.uid                       // uid
-            // nickname.text = item.nickname             // 이름
+
             //viewCount.text = item.viewCount.toString() // 조회수
             // location.text = item.location             // 장소
             // category.text = item.category
@@ -135,3 +145,5 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 }
+
+

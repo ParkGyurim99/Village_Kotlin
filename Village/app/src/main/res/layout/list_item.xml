@@ -18,7 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/list_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="110dp">
 
             <ImageView
                 android:id="@+id/image"
@@ -41,6 +41,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
                 android:hint="제목"
+                android:fontFamily="@font/inter_bold"
+                android:lineHeight="19sp"
                 app:layout_constraintBottom_toTopOf="@+id/time"
                 app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="parent"
@@ -77,6 +79,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
                 android:hint="가격"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="parent"

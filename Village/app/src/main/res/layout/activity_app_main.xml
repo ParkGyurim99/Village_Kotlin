@@ -7,15 +7,16 @@
     android:layout_rowWeight="3"
     android:orientation="vertical"
     tools:context=".AppMainActivity">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/searchWord"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="8"
             android:hint="검색어를 입력해주세요."
             android:inputType="text" />
 
@@ -23,18 +24,31 @@
             android:id="@+id/btn_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/btn_map_mark"
+            android:layout_toEndOf="@+id/searchWord"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/search" />
+
+        <ImageButton
+            android:id="@+id/btn_map_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_gravity="right|center"
-            android:src="@drawable/search"
-            android:backgroundTint="@color/white"/>
-    </RelativeLayout>
+            android:backgroundTint="@color/white"
+            android:src="@drawable/button_event_map_marker" />
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8"
-        android:padding="10dp"
+        android:padding="5dp"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,34 +73,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageButton
             android:id="@+id/btn_home"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_home"
-            android:backgroundTint="@color/white" />
+            android:layout_weight="2"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/button_event_home" />
         <ImageButton
             android:id="@+id/btn_map"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_map"
+            android:layout_weight="2"
+            android:src="@drawable/button_event_map"
             android:layout_gravity="right"
-            android:backgroundTint="@color/white"
-            android:layout_marginLeft="20dp"/>
+            android:backgroundTint="@color/white" />
         <ImageButton
             android:id="@+id/btn_write"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit"
-            android:backgroundTint="@color/white"
-            android:layout_marginLeft="20dp"/>
+            android:layout_weight="2"
+            android:src="@drawable/button_event_edit"
+            android:backgroundTint="@color/white" />
         <ImageButton
             android:id="@+id/btn_userInfo"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_user"
-            android:backgroundTint="@color/white"
-            android:layout_marginLeft="20dp"/>
+            android:layout_weight="2"
+            android:src="@drawable/button_event_profile"
+            android:backgroundTint="@color/white" />
 
     </LinearLayout>
 </LinearLayout>
