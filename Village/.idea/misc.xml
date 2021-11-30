@@ -7,8 +7,9 @@
         <entry key="app/src/main/res/drawable-hdpi/borderline.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/background_btn.xml" value="0.10197415319178504" />
         <entry key="app/src/main/res/drawable-v24/edittext_background.xml" value="0.39739583333333334" />
+        <entry key="app/src/main/res/drawable/navigation_background.xml" value="0.29074074074074074" />
         <entry key="app/src/main/res/drawable/userinfo_low_background.xml" value="0.13703703703703704" />
-        <entry key="app/src/main/res/layout/activity_app_main.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_app_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23641304347826086" />
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.1734375" />

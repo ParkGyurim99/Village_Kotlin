@@ -8,5 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="errorColor">#3D3D98</color>
+    <color name="mainBackgroundColor">#f1f1fa</color>
     <color name="dial_background">#D4B1FE</color>
 </resources>

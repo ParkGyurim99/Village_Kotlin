@@ -5,56 +5,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_rowWeight="3"
+    android:background="@drawable/background_top"
+
     android:orientation="vertical"
     tools:context=".AppMainActivity">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/searchWord"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="8"
-            android:hint="검색어를 입력해주세요."
-            android:inputType="text" />
-
-        <ImageButton
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/btn_map_mark"
-            android:layout_toEndOf="@+id/searchWord"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/search" />
-
-        <ImageButton
-            android:id="@+id/btn_map_mark"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/button_event_map_marker" />
-
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="70dp"
         android:layout_weight="8"
-        android:padding="5dp"
+        android:background="@drawable/userinfo_low_background"
+        android:backgroundTint="@color/mainBackgroundColor"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/white">
+            android:layout_marginTop="60dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/searchWord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:hint="검색어를 입력해주세요."
+                android:inputType="text" />
+
+            <ImageButton
+                android:id="@+id/btn_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/btn_map_mark"
+                android:layout_toEndOf="@+id/searchWord"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/search" />
+
+            <ImageButton
+                android:id="@+id/btn_map_mark"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_weight="1"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/button_event_map_marker" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipeRefresh"
                 android:layout_width="match_parent"
@@ -65,14 +72,15 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1">
-                </androidx.recyclerview.widget.RecyclerView>
+                    android:layout_weight="1"></androidx.recyclerview.widget.RecyclerView>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
         <ImageButton
             android:id="@+id/btn_home"
@@ -81,28 +89,31 @@
             android:layout_weight="2"
             android:backgroundTint="@color/white"
             android:src="@drawable/button_event_home" />
+
         <ImageButton
             android:id="@+id/btn_map"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:src="@drawable/button_event_map"
             android:layout_gravity="right"
-            android:backgroundTint="@color/white" />
+            android:layout_weight="2"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/button_event_map" />
+
         <ImageButton
             android:id="@+id/btn_write"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:src="@drawable/button_event_edit"
-            android:backgroundTint="@color/white" />
+            android:backgroundTint="@color/white"
+            android:src="@drawable/button_event_edit" />
+
         <ImageButton
             android:id="@+id/btn_userInfo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:src="@drawable/button_event_profile"
-            android:backgroundTint="@color/white" />
+            android:backgroundTint="@color/white"
+            android:src="@drawable/button_event_profile" />
 
     </LinearLayout>
 </LinearLayout>
