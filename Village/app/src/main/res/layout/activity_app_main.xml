@@ -10,17 +10,12 @@
     android:orientation="vertical"
     tools:context=".AppMainActivity">
 
-    <TextView
-        android:id="@+id/mainTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="45dp"
-        android:layout_marginTop="30dp"
-        android:padding="13dp"
-        android:text="Explore"
-        android:textColor="@color/white"
-        android:textSize="19sp"
-        android:textStyle="bold" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="183dp"
+        android:layout_height="73dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/logo_white" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,15 +28,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="45dp"
-            android:orientation="horizontal">
+            android:layout_marginRight="20dp"
+            android:background="@drawable/main_searchbar"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingEnd="0dp">
 
             <EditText
                 android:id="@+id/searchWord"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="8"
                 android:hint="검색어를 입력해주세요."
+                android:background="@null"
                 android:inputType="text" />
 
             <ImageButton
@@ -52,32 +53,20 @@
                 android:layout_toStartOf="@+id/btn_map_mark"
                 android:layout_toEndOf="@+id/searchWord"
                 android:layout_weight="1"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="#00ff0000"
                 android:src="@drawable/search" />
-
-            <ImageButton
-                android:id="@+id/btn_map_mark"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_weight="1"
-                android:backgroundTint="@color/white"
-                android:src="@drawable/button_event_map_marker" />
-
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="9"
             android:orientation="vertical">
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipeRefresh"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_height="wrap_content">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
@@ -86,45 +75,52 @@
                     android:layout_weight="1"></androidx.recyclerview.widget.RecyclerView>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/nav_background"
+            android:backgroundTint="@color/white">
+
+            <ImageButton
+                android:id="@+id/btn_home"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:backgroundTint="@color/white"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/button_event_home" />
+
+            <ImageButton
+                android:id="@+id/btn_map"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:backgroundTint="@color/white"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/button_event_map" />
+
+            <ImageButton
+                android:id="@+id/btn_write"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/button_event_edit" />
+
+            <ImageButton
+                android:id="@+id/btn_userInfo"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/button_event_profile" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
-
-        <ImageButton
-            android:id="@+id/btn_home"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/button_event_home" />
-
-        <ImageButton
-            android:id="@+id/btn_map"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_weight="2"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/button_event_map" />
-
-        <ImageButton
-            android:id="@+id/btn_write"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/button_event_edit" />
-
-        <ImageButton
-            android:id="@+id/btn_userInfo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/button_event_profile" />
-
-    </LinearLayout>
 </LinearLayout>
