@@ -1,5 +1,6 @@
 package com.example.village.model
 
+import com.google.android.gms.maps.model.LatLng
 import java.io.Serializable
 
 data class Post(var uid : String? = null,
@@ -9,6 +10,8 @@ data class Post(var uid : String? = null,
                 var title : String? = null,
                 var category : String? = null,
                 var location : String? = null,
+                var lat : Double? = null,
+                var lng : Double? = null,
                 var timestamp : Long? = null,
                 var time : String? = null,
                 var price : Int? = null,
@@ -24,6 +27,8 @@ data class Post(var uid : String? = null,
             "title" to title,
             "category" to category,
             "location" to location,
+            "lat" to lat,
+            "lng" to lng,
             "timestamp" to timestamp,
             "time" to time,
             "price" to price,

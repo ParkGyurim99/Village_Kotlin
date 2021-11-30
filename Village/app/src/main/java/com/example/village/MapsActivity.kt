@@ -53,12 +53,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private var now = LatLng(35.886108, 128.613053)
+    private var now : LatLng? = null
     private var currentMarker : Marker? = null
 
     // 포스트 가져와서 배열 만들기
     init {
-        database.collection("user-posts").get()
+        database.collection("user-posts").orderBy("timestamp").get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot != null) {
                     for (document in documentSnapshot) {
@@ -116,13 +116,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // 포스트 개수만큼 마커 띄우기
         for (i in 0..(itemList.size-1)) {
-            val cor = mGeocoder.getFromLocationName(itemList[i].location, 1)    // 주소 문자열을 위도 경도로 변환
-            latLng = LatLng(cor[0].latitude, cor[0].longitude)
+            val latLng = LatLng(itemList[i].lat!!, itemList[i].lng!!)
 
-            //Log.d("주소","위도: ${cor[0].latitude}, 경도: ${cor[0].longitude}")
+            println("${itemList[i].lat}")
+            println("${itemList[i].lng}")
 
-            val address = itemList[i].location!!.substring(11, 22)
-            marker = mMap.addMarker(MarkerOptions().position(latLng).title("${itemList[i].title}").snippet("$address")) // 제목, 위치로 마커 표시
+            val address = itemList[i].location!!
+            marker = mMap.addMarker(MarkerOptions().position(latLng).title("${itemList[i].title}").snippet("$address"))
 
             marker.tag = itemList[i].imageUrl + "#" +    // index 0번
                     itemList[i].price.toString() + "#" + // index 1번
@@ -187,6 +187,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
+        now = LatLng(itemList[0].lat!!, itemList[0].lng!!)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(now, 18.0f))
     }
 

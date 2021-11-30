@@ -3,6 +3,7 @@ package com.example.village
 import android.app.Activity
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
+import android.location.*
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -11,11 +12,15 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.village.model.Post
 import com.example.village.model.UserModel
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.io.IOException
 import java.lang.Exception
 import java.util.*
 
@@ -41,6 +46,12 @@ class WriteActivity : AppCompatActivity() {
     /* 현재 로그인한 사용자 */
     val user = Firebase.auth.currentUser
 
+    /* 현재 위치 */
+    var location : String? = null
+    //var latLng : LatLng? = null
+    var lat : Double? = null
+    var lng : Double? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.writing)
@@ -59,6 +70,8 @@ class WriteActivity : AppCompatActivity() {
             openGallery()
         }
 
+        getLocation()
+
         // 작성 완료 버튼 누를 시, DB에 포스트 업로드
         btnWrite.setOnClickListener {
             var title = etTitle.text.toString()
@@ -75,13 +88,6 @@ class WriteActivity : AppCompatActivity() {
                     if (documentSnapshot != null) {
                         for (document in documentSnapshot) {
                             val getData = document.toObject<UserModel>()
-
-                            /*println(" ")
-                            println(" ")
-                            println("if문 안에 진입 : getData? " + getData.uid)
-                            println("if문 안에 진입 : uid? " + uid)
-                            println(" ")
-                            println(" ")*/
 
                             if (getData!!.uid.contentEquals(uid)) {
                                 nickname = getData.userName.toString()
@@ -151,6 +157,8 @@ class WriteActivity : AppCompatActivity() {
             val t_date = Date(long_now)     // 현재 시간을 Date 타입으로 변환
             val t_dateFormat = SimpleDateFormat("yyyy-MM-dd kk:mm:ss", Locale("ko", "KR"))
 
+            var locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
+
             // 닉네임과 uid도 같이 저장
             newPost.nickname = nickname
             newPost.uid = uid
@@ -161,6 +169,10 @@ class WriteActivity : AppCompatActivity() {
             newPost.body = body
             newPost.timestamp = System.currentTimeMillis()
             newPost.time = t_dateFormat.format(t_date)
+            // newPost.latLng  = latLng
+            newPost.lat = lat
+            newPost.lng = lng
+            newPost.location = location
 
             database.collection("user-posts")
                 .add(newPost)
@@ -170,6 +182,41 @@ class WriteActivity : AppCompatActivity() {
                 .addOnFailureListener { exception ->
                     Log.w("MainActivity", "Error getting documents: $exception")
                 }
+        }
+    }
+
+    fun getLocation() {
+        var locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
+
+        var locationListener = object : LocationListener {
+            override fun onLocationChanged(p0: Location) {
+                lat = p0!!.latitude
+                lng = p0!!.longitude
+
+                var mGeocoder = Geocoder(applicationContext, Locale.KOREAN)
+                var mResultList : List<Address>? = null
+
+                try {
+                    mResultList = mGeocoder.getFromLocation(p0.latitude, p0.longitude, 1)
+                } catch (e : IOException) {
+                    e.printStackTrace()
+                }
+
+                if (mResultList != null) {
+                    Log.d("Check Current Location", mResultList[0].getAddressLine(0))
+                    location = mResultList[0].getAddressLine(0).substring(11, 17)
+                }
+            }
+
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) { }
+            override fun onProviderEnabled(provider: String) { }
+            override fun onProviderDisabled(provider: String) { }
+        }
+
+        try {
+            locationManager!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
+        } catch (ex:SecurityException) {
+            Toast.makeText(applicationContext, "Error!", Toast.LENGTH_SHORT).show()
         }
     }
 }
