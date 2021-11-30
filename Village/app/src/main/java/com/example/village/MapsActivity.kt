@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.village.databinding.ActivityMapsBinding
 import com.example.village.model.Post
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
@@ -32,6 +33,8 @@ import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.list_item.view.*
 import java.io.IOException
 import java.util.*
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /*private var items = listOf<Post>(
@@ -203,7 +206,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 try {
                     //mResultList = mGeocoder.getFromLocation(p0.latitude, p0.longitude, 1)
-                    mResultList = mGeocoder.getFromLocation(locations[0].latitude, locations[0].longitude, 1)
+                    mResultList = mGeocoder.getFromLocation(p0!!.latitude, p0!!.longitude, 1)
                 } catch (e : IOException) {
                     e.printStackTrace()
                 }
@@ -219,6 +222,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     markerOptions.position(latLng)
                     markerOptions.title("Current Location")
+
+                    val bitmapdraw = resources.getDrawable(R.drawable.ic_currentlocation) as BitmapDrawable
+                    val b = bitmapdraw.bitmap
+                    val smallMarker = Bitmap.createScaledBitmap(b, 130, 130, false)
+                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+
+                    //markerOptions.icon(BitmapDescriptorFactory.fromResource(smallMarker));
+
                     //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_user_location)) // 마커 아이콘 수정
                     //markerOptions.rotation(p0.bearing)
                     //markerOptions.anchor(0.5.toFloat(), 0.5.toFloat())
