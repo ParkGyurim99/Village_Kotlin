@@ -3,23 +3,14 @@ package com.example.village
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import androidx.core.view.setPadding
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.firebase.firestore.FirebaseFirestore
 import com.example.village.databinding.ActivityAppMainBinding
-import com.example.village.model.Person
 import com.example.village.model.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -86,8 +77,6 @@ class AppMainActivity : AppCompatActivity() {
         // 리사이클러 뷰 새로고침
         val swipeRefresh = findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
         swipeRefresh.setOnRefreshListener {
-            recyclerView.layoutManager = LinearLayoutManager(this)
-            recyclerView.adapter = adapter
             observerData()
 
             swipeRefresh.isRefreshing = false   // 새로고침
@@ -119,6 +108,7 @@ class AppMainActivity : AppCompatActivity() {
             goLoginActivity()
         }
     }
+
     private fun goLoginActivity(){
         val intent = Intent(this,LoginActivity::class.java)
         startActivity(intent)

@@ -12,9 +12,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.village.model.Post
 import com.example.village.model.UserModel
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject

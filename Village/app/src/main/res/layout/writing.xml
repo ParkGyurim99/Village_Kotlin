@@ -44,7 +44,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/inter_bold"
             android:text="완료"
-            android:textColor="#91919F"
+            android:textColor="#212325"
             android:textSize="20sp"
             style="?android:borderlessButtonStyle"/>
     </LinearLayout>

@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:visibility="gone">
+    android:visibility="gone"
+    android:id="@+id/comment_list_layout">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -19,7 +20,6 @@
         android:background="@drawable/posting_rectangle">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/comment_list_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

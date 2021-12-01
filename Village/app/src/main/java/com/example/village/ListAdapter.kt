@@ -91,11 +91,6 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val price: TextView = itemView.findViewById(R.id.price)
         val likeCount: TextView = itemView.findViewById(R.id.likeCount)
 
-
-
-
-        //val viewCount: TextView = itemView.findViewById(R.id.viewCount)
-
         // onBindViewHolder에서 호출
         fun bind(item: Post) {
             var path: String = item.imageUrl.toString()
@@ -112,7 +107,7 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             item.timestamp
             // 일단 list_item.xml에 표시될 데이터
             title.text = item.title                      // 제목
-            time.text = item.time.toString()        // 시간
+            time.text = item.time.toString()             // 시간
             price.text = item.price.toString() + "원"     // 가격
             likeCount.text = item.likeCount.toString()   // 좋아요 수
 
