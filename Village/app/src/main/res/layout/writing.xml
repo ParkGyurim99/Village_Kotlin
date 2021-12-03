@@ -135,7 +135,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="20dp"
-                android:text="Category"
+                android:hint="Category"
                 android:textAllCaps="false"
                 android:textColor="#91919F"
                 android:textSize="15sp" />
@@ -198,34 +198,6 @@
                 android:paddingBottom="10dp"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
-
-            <!-- 판매자, 위치 정보 (테스트용으로 적어보기) -->
-            <!--<LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="horizontal"
-                android:background="@drawable/borderline">
-
-                <ImageView
-                    android:id="@+id/test_profile"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@android:color/transparent"
-                    android:padding="0dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/profile_sample"/>
-
-                <EditText
-                    android:id="@+id/test_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="20dp"
-                    android:hint="장소"/>
-            </LinearLayout>-->
         </LinearLayout>
     </ScrollView>
 
@@ -245,5 +217,4 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp" />
-
 </LinearLayout>

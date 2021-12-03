@@ -2,11 +2,14 @@ package com.example.village
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.village.model.Post
+import com.example.village.model.UserModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
@@ -16,8 +19,6 @@ class PostActivity : AppCompatActivity() {
     lateinit var tvName : TextView
     lateinit var tvLocation : TextView
     lateinit var tvTitle : TextView
-    //lateinit var tvLikes : TextView
-    //lateinit var tvViews : TextView
     lateinit var tvTime : TextView
     lateinit var tvCategory : TextView
     lateinit var tvBody : TextView
@@ -25,8 +26,9 @@ class PostActivity : AppCompatActivity() {
     lateinit var tvPrice : TextView
     lateinit var btnComment : ImageButton
 
-    /* 데이터베이스 */
+    /* 스토리지 */
     var database = FirebaseFirestore.getInstance()
+    var storage = Firebase.storage
 
     /* 현재 로그인한 사용자 */
     val user = Firebase.auth.currentUser
@@ -36,6 +38,7 @@ class PostActivity : AppCompatActivity() {
         setContentView(R.layout.posting)
 
         ivGoods_p = findViewById(R.id.ivGoods_p)
+        ivProfile = findViewById(R.id.ivProfile)
         tvName = findViewById(R.id.tvName)
         tvLocation = findViewById(R.id.tvLocation)
         tvTitle = findViewById(R.id.tvTitle)
@@ -48,9 +51,6 @@ class PostActivity : AppCompatActivity() {
         tvPrice = findViewById(R.id.tvPrice)
         btnHeart = findViewById(R.id.btnHeart)
         btnComment = findViewById(R.id.btnComment)
-        //btnWriteComment = findViewById(R.id.btnWriteComment)
-
-
 
         val postPosition = intent.getIntExtra("pid", 0) // AppMainActivity에서 받은 pid
 
@@ -61,21 +61,14 @@ class PostActivity : AppCompatActivity() {
         }
 
 
-
-        // 이미지 테두리 둥그래지는지 테스트
-        var ivProfile = findViewById<ImageView>(R.id.ivProfile)
-        ivProfile.clipToOutline = true
-
-
         /* 글 내용 표시 */
         val intentPost = intent.getSerializableExtra("user-posts") as Post
 
-        // 이미지 (얘도 스토리지에서 바로 가져오는 방식으로..)
-        var path: String = intentPost.imageUrl.toString()
-        var storage = Firebase.storage
-        var gsRef = storage.getReferenceFromUrl(path)
+        // 제품 이미지
+        var image_path: String = intentPost.imageUrl.toString()
+        var gsRef_image = storage.getReferenceFromUrl(image_path)
 
-        gsRef.downloadUrl.addOnCompleteListener {
+        gsRef_image.downloadUrl.addOnCompleteListener {
             if (it.isSuccessful) {
                 GlideApp.with(this)
                     .load(it.result)
@@ -85,13 +78,45 @@ class PostActivity : AppCompatActivity() {
 
         ivGoods_p.clipToOutline = true
 
+        // 사용자(판매자) 프로필 이미지
+        var profile_image_path: String? = null
+
+        database.collection("users").document(intentPost.uid!!)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    Log.d("document.data", "${document.data}")
+                    val getData = document.toObject<UserModel>()
+
+                    profile_image_path = getData!!.imageUrl.toString()
+
+                    println("이미지 경로 : " + profile_image_path)
+
+                    var gsRef_profile_image = storage.getReferenceFromUrl(profile_image_path!!)
+
+                    gsRef_profile_image.downloadUrl.addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            GlideApp.with(this)
+                                .load(it.result)
+                                .into(ivProfile)
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("DocSnippets", "Error getting documents: ", exception)
+            }
+
+        // 사용자 프로필 이미지 테두리 동그랗게
+        ivProfile.clipToOutline = true
+
         tvName.text = intentPost.nickname                   // 이름
         tvTitle.text = intentPost.title                     // 제목
         tvTime.text = intentPost.time.toString()            // 시간
         tvPrice.text = intentPost.price.toString() + "원"   // 가격
         tvBody.text = intentPost.body.toString()            // 내용
-        // tvLocation.text = intentPost.location            // 장소
-        // tvCategory.text = intentPost.category            // 카테고리
+        tvLocation.text = intentPost.location            // 장소
+        tvCategory.text = intentPost.category            // 카테고리
 
         var flag = 0
         btnHeart.setOnClickListener {

@@ -8,7 +8,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.village.model.Post
 import com.example.village.model.UserModel
@@ -17,8 +19,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.android.synthetic.main.dialog.*
 import java.io.IOException
 import java.lang.Exception
+import java.lang.NumberFormatException
 import java.util.*
 
 class WriteActivity : AppCompatActivity() {
@@ -28,8 +32,6 @@ class WriteActivity : AppCompatActivity() {
     lateinit var btnCategory : Button
     lateinit var etPrice : EditText
     lateinit var etBody : EditText
-
-    lateinit var test_name : EditText
     lateinit var ivGoods_w : ImageView
     var imgUri: Uri? = null
 
@@ -45,9 +47,11 @@ class WriteActivity : AppCompatActivity() {
 
     /* 현재 위치 */
     var location : String? = null
-    //var latLng : LatLng? = null
     var lat : Double? = null
     var lng : Double? = null
+
+    /* 카테고리 받을 변수 */
+    var category : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,37 +73,63 @@ class WriteActivity : AppCompatActivity() {
 
         getLocation()
 
+
+        val (alertDialog, dial_text, dial_btn) = setDialog()
+        dial_btn.setOnClickListener {
+            alertDialog.dismiss()    // 대화상자를 닫는 함수
+        }
+
         // 작성 완료 버튼 누를 시, DB에 포스트 업로드
         btnWrite.setOnClickListener {
-            var title = etTitle.text.toString()
-            var price = etPrice.text.toString().toInt()
-            var body = etBody.text.toString()
 
-            // 닉네임과 uid도 같이 저장
-            var uid = user!!.uid
-            var nickname: String = "실패"    // user.displayName
 
-            // 같은 uid를 가진 사용자 닉네임 DB에서 가져오기
-            database.collection("users").get()
-                .addOnSuccessListener { documentSnapshot ->
-                    if (documentSnapshot != null) {
-                        for (document in documentSnapshot) {
-                            val getData = document.toObject<UserModel>()
+            try {
+                // 칸이 비어있는지 먼저 검사
+                var title = etTitle.text.toString()
+                var category = btnCategory.text.toString()
+                var body = etBody.text.toString()
 
-                            if (getData!!.uid.contentEquals(uid)) {
-                                nickname = getData.userName.toString()
+                if (imgUri == null || title.isNullOrBlank() || category.isNullOrBlank() || body.isNullOrBlank()) {
+                    throw NullPointerException("NullPointerException")
+                }
 
-                                postUpload(nickname!!, uid, imgUri, title, price, body) // 리스너 안에다 넣어야 되네..
-                                break
+                // 닉네임과 uid, price 저장
+                var uid = user!!.uid
+                var nickname: String? = null
+
+                var price = etPrice.text.toString().toInt()
+
+                // 같은 uid를 가진 사용자 닉네임 DB에서 가져오기
+                database.collection("users").get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        if (documentSnapshot != null) {
+                            for (document in documentSnapshot) {
+                                val getData = document.toObject<UserModel>()
+
+                                if (getData!!.uid.contentEquals(uid)) {
+                                    nickname = getData.userName.toString()
+
+                                    postUpload(nickname!!, uid, imgUri, title, category, price, body)
+                                    break
+                                }
                             }
                         }
                     }
-                }
-                .addOnFailureListener { exception ->
-                    Log.w("DocSnippets", "Error getting documents: ", exception)
-                }
+                    .addOnFailureListener { exception ->
+                        Log.w("DocSnippets", "Error getting documents: ", exception)
+                    }
 
-            // document(uid)
+            } catch (e: NullPointerException) {
+                dial_text.setText("빈 칸을 모두 채우거나 사진을 선택해주세요.")
+                alertDialog.show()
+
+                return@setOnClickListener
+            } catch (e: NumberFormatException) {
+                dial_text.setText("가격은 숫자로 적어주세요.")
+                alertDialog.show()
+
+                return@setOnClickListener
+            }
 
             finish()
         }
@@ -109,6 +139,114 @@ class WriteActivity : AppCompatActivity() {
         btnReturn.setOnClickListener {
             finish()
         }
+
+        // 카테고리 버튼
+        btnCategory.setOnClickListener {
+            var catMenu = PopupMenu(applicationContext, btnCategory)
+
+            menuInflater?.inflate(R.menu.category_menu, catMenu.menu)
+            catMenu.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.cat_item1 -> {
+                        btnCategory.setText("디지털기기")
+                        category = "디지털기기"
+                    }
+
+                    R.id.cat_item2 -> {
+                        btnCategory.setText("생활가전")
+                        category = "생활가전"
+                    }
+
+                    R.id.cat_item3 -> {
+                        btnCategory.setText("가전/인테리어")
+                        category = "가전/인테리어"
+                    }
+
+                    R.id.cat_item4 -> {
+                        btnCategory.setText("유아동")
+                        category = "유아동"
+                    }
+
+                    R.id.cat_item5 -> {
+                        btnCategory.setText("생활/가공식품")
+                        category = "생활/가공식품"
+                    }
+
+                    R.id.cat_item6 -> {
+                        btnCategory.setText("유아도서")
+                        category = "유아도서"
+                    }
+
+                    R.id.cat_item7 -> {
+                        btnCategory.setText("스포츠/레저")
+                        category = "스포츠/레저"
+                    }
+
+                    R.id.cat_item8 -> {
+                        btnCategory.setText("여성잡화")
+                        category = "여성잡화"
+                    }
+
+                    R.id.cat_item9 -> {
+                        btnCategory.setText("여성의류")
+                        category = "여성의류"
+                    }
+
+                    R.id.cat_item10 -> {
+                        btnCategory.setText("남성패션/잡화")
+                        category = "남성패션/잡화"
+                    }
+
+                    R.id.cat_item11 -> {
+                        btnCategory.setText("게임/취미")
+                        category = "게임/취미"
+                    }
+
+                    R.id.cat_item12 -> {
+                        btnCategory.setText("뷰티/미용")
+                        category = "뷰티/미용"
+                    }
+
+                    R.id.cat_item13 -> {
+                        btnCategory.setText("반려동물용품")
+                        category = "반려동물용품"
+                    }
+
+                    R.id.cat_item14 -> {
+                        btnCategory.setText("도서/티켓/음반")
+                        category = "도서/티켓/음반"
+                    }
+
+                    R.id.cat_item15 -> {
+                        btnCategory.setText("식물")
+                        category = "식물"
+                    }
+
+                    R.id.cat_item16 -> {
+                        btnCategory.setText("기타 중고물품")
+                        category = "기타 중고물품"
+                    }
+                }
+
+                false
+            }
+
+            catMenu.show()
+        }
+    }
+
+    private fun setDialog() : Triple<AlertDialog, TextView, TextView>{
+        val view = View.inflate(this,R.layout.dialog,null)
+        val builder = AlertDialog.Builder(this,R.style.CustomAlertDialog)
+        builder.setView(view)
+
+        val alertDialog = builder.create()
+        alertDialog.setCancelable(false)
+
+        val dial_text = view.findViewById<TextView>(R.id.dial_text)
+        val dial_btn = view.findViewById<TextView>(R.id.dial_btn)
+
+        return  Triple(alertDialog, dial_text, dial_btn)
     }
 
     // 갤러리 여는 함수
@@ -141,7 +279,7 @@ class WriteActivity : AppCompatActivity() {
     }
 
     // DB에 포스트 올리는 함수
-    private fun postUpload(nickname: String, uid: String, imageUri: Uri?, title: String, price: Int, body: String) {
+    private fun postUpload(nickname: String, uid: String, imageUri: Uri?, title: String, category: String, price: Int, body: String) {
         var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         var imageFileName = "IMAGE_" + timestamp + ".png"
 
@@ -166,7 +304,7 @@ class WriteActivity : AppCompatActivity() {
             newPost.body = body
             newPost.timestamp = System.currentTimeMillis()
             newPost.time = t_dateFormat.format(t_date)
-            // newPost.latLng  = latLng
+            newPost.category  = category
             newPost.lat = lat
             newPost.lng = lng
             newPost.location = location

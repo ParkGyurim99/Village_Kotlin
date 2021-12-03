@@ -129,6 +129,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             marker.tag = itemList[i].imageUrl + "#" +    // index 0번
                     itemList[i].price.toString() + "#" + // index 1번
+                    itemList[i].time.toString() + "#" +  // index 2번
                     i.toString()
         }
 
@@ -141,6 +142,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     var title = maps_iteminfo.findViewById<TextView>(R.id.title)
                     var location = maps_iteminfo.findViewById<TextView>(R.id.location)
                     var price = maps_iteminfo.findViewById<TextView>(R.id.price)
+                    var time = maps_iteminfo.findViewById<TextView>(R.id.time)
 
                     var markerTagList = marker!!.tag.toString()
                         .split("#")    // 마커에 붙인 태그 [0]: 이미지, [1]: 가격, [2]: pos
@@ -159,11 +161,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         }
                     }
 
+                    image.clipToOutline = true
+
                     title.text = marker!!.title
                     location.text = marker.snippet
-                    price.text = markerTagList[1]
+                    price.text = markerTagList[1] + "원"
+                    time.text = markerTagList[2]
 
-                    var index = markerTagList[2].toInt()
+                    var index = markerTagList[3].toInt()
 
                     // 카드뷰 클릭시 상세 페이지로 이동
                     maps_iteminfo.setOnClickListener {
@@ -190,7 +195,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
-        now = LatLng(itemList[0].lat!!, itemList[0].lng!!)
+        now = LatLng(itemList[0].lat!!, itemList[0].lng!!)  // 지도 화면 나갔다가 들어오면 여기서 IndexOutOfBoundsException 발생
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(now, 18.0f))
     }
 

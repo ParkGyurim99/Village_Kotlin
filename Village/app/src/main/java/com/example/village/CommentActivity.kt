@@ -61,7 +61,8 @@ class CommentActivity : AppCompatActivity() {
 
             // 닉네임과 uid도 같이 저장
             var uid = user!!.uid
-            var nickname: String = "실패"
+            var nickname: String? = null
+            var imagePath: String? = null
 
             // 같은 uid를 가진 사용자 닉네임 DB에서 가져오기
             database.collection("users").get()
@@ -72,8 +73,10 @@ class CommentActivity : AppCompatActivity() {
 
                             if (getData!!.uid.contentEquals(uid)) {
                                 nickname = getData.userName.toString()
+                                imagePath = getData.imageUrl.toString()
 
-                                commentUpload(nickname!!, uid, body, postPosition) // 리스너 안에다 넣어야 되네..
+                                // https://firebasestorage.googleapis.com/v0/b/village-e6e1a.appspot.com/o/profile_images%2FIMAGE_20211202_004827_.png?alt=media&token=c708e9e4-3438-4cb1-b295-34bdc3825345
+                                commentUpload(nickname!!, uid, imagePath!!, body, postPosition) // 리스너 안에다 넣어야 되네..
                                 break
                             }
                         }
@@ -112,7 +115,7 @@ class CommentActivity : AppCompatActivity() {
     }
 
     // DB에 댓글 올리는 함수
-    private fun commentUpload(nickname: String, uid: String, body: String, pid: Int) {
+    private fun commentUpload(nickname: String, uid: String, imagePath: String, body: String, pid: Int) {
         var newComment = Comment()
         //var repo2 = Repository2()
 
@@ -123,13 +126,11 @@ class CommentActivity : AppCompatActivity() {
         // 닉네임과 uid도 같이 저장
         newComment.nickname = nickname
         newComment.uid = uid
+        newComment.imageUrl = imagePath
         newComment.pid = pid
         newComment.body = body
         newComment.timestamp = System.currentTimeMillis()
         newComment.time = t_dateFormat.format(t_date).toString()
-
-        //var repo2 = Repository2()
-        //repo2.setPid(pid)   // Repository에 pid값 전달
 
         database.collection("user-comments")
             .add(newComment)
@@ -153,12 +154,6 @@ class CommentActivity : AppCompatActivity() {
 
                 for (document in documentSnapshot) {
                     val getData = document.toObject<Comment>()
-
-                    /*listData.add(getData!!)
-
-                    println("getData.pid: ${getData.pid}")
-
-                    mutableData.value = listData*/
 
                     if (postPosition == getData.pid) {
                         listData.add(getData!!)

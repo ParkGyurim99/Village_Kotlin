@@ -83,20 +83,19 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         : RecyclerView.ViewHolder(itemView) {
 
         val image: ImageView = itemView.findViewById(R.id.image)
-        //val nickname: TextView = itemView.findViewById(R.id.nickname)
         val title: TextView = itemView.findViewById(R.id.title)
 
         val location: TextView = itemView.findViewById(R.id.location)
         val time: TextView = itemView.findViewById(R.id.time)
         val price: TextView = itemView.findViewById(R.id.price)
-        val likeCount: TextView = itemView.findViewById(R.id.likeCount)
 
         // onBindViewHolder에서 호출
         fun bind(item: Post) {
             var path: String = item.imageUrl.toString()
             var storage = Firebase.storage
             var gsRef = storage.getReferenceFromUrl(path)
-                // 이미지
+
+            // 이미지
             gsRef.downloadUrl.addOnCompleteListener {
                 if (it.isSuccessful) {
                     GlideApp.with(itemView)
@@ -104,17 +103,15 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .into(image)
                 }
             }
-            item.timestamp
-            // 일단 list_item.xml에 표시될 데이터
+
+            image.clipToOutline = true
+
             title.text = item.title                      // 제목
             time.text = item.time.toString()             // 시간
             price.text = item.price.toString() + "원"     // 가격
-            likeCount.text = item.likeCount.toString()   // 좋아요 수
-
-
-            //viewCount.text = item.viewCount.toString() // 조회수
-            // location.text = item.location             // 장소
+            location.text = item.location                 // 장소
             // category.text = item.category
+
             val pos = adapterPosition
             if(pos!= RecyclerView.NO_POSITION)
             {

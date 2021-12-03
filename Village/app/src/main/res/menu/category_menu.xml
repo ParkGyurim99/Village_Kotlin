@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/cat_item1"
+        android:title="디지털기기"/>
+
+    <item
+        android:id="@+id/cat_item2"
+        android:title="생활가전"/>
+
+    <item
+        android:id="@+id/cat_item3"
+        android:title="가전/인테리어"/>
+
+    <item
+        android:id="@+id/cat_item4"
+        android:title="유아동"/>
+
+    <item
+        android:id="@+id/cat_item5"
+        android:title="생활/가공식품"/>
+
+    <item
+        android:id="@+id/cat_item6"
+        android:title="유아도서"/>
+
+    <item
+        android:id="@+id/cat_item7"
+        android:title="스포츠/레저"/>
+
+    <item
+        android:id="@+id/cat_item8"
+        android:title="여성잡화"/>
+
+    <item
+        android:id="@+id/cat_item9"
+        android:title="여성의류"/>
+
+    <item
+        android:id="@+id/cat_item10"
+        android:title="남성패션/잡화"/>
+
+    <item
+        android:id="@+id/cat_item11"
+        android:title="게임/취미"/>
+
+    <item
+        android:id="@+id/cat_item12"
+        android:title="뷰티/미용"/>
+
+    <item
+        android:id="@+id/cat_item13"
+        android:title="반려동물용품"/>
+
+    <item
+        android:id="@+id/cat_item14"
+        android:title="도서/티켓/음반"/>
+
+    <item
+        android:id="@+id/cat_item15"
+        android:title="식물"/>
+
+    <item
+        android:id="@+id/cat_item16"
+        android:title="기타 중고물품"/>
+</menu>

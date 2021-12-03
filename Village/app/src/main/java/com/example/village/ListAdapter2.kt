@@ -10,6 +10,8 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.village.model.Comment
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 class ListAdapter2 : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -83,6 +85,13 @@ class ListAdapter2 : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             comment_image.clipToOutline = true
 
             if (item.pid == pid) {
+                var path: String = item.imageUrl.toString()
+
+                // 이미지
+                GlideApp.with(itemView)
+                    .load(path)
+                    .into(comment_image)
+
                 comment_nickname.text = item.nickname      // 이름
                 comment_time.text = item.time.toString()   // 시간
                 comment_body.text = item.body

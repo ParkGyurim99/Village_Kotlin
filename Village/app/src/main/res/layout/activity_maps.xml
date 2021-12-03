@@ -68,6 +68,7 @@
     <include
         android:id="@+id/maps_iteminfo"
         layout="@layout/list_item"
+        android:background="@drawable/thumbnail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
