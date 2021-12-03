@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/drawable-v24/edittext_background.xml" value="0.39739583333333334" />
         <entry key="app/src/main/res/drawable/main_searchbar.xml" value="0.30364583333333334" />
         <entry key="app/src/main/res/drawable/navigation_background.xml" value="0.29074074074074074" />
+        <entry key="app/src/main/res/drawable/posting_crop_image.xml" value="0.25833333333333336" />
         <entry key="app/src/main/res/drawable/userinfo_low_background.xml" value="0.13703703703703704" />
         <entry key="app/src/main/res/layout/activity_app_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.22" />

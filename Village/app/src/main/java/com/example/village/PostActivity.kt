@@ -50,18 +50,7 @@ class PostActivity : AppCompatActivity() {
         btnComment = findViewById(R.id.btnComment)
         //btnWriteComment = findViewById(R.id.btnWriteComment)
 
-        // 뒤로 가기 버튼
-        var btnReturn = findViewById<ImageButton>(R.id.btnReturn)
-        btnReturn.setOnClickListener {
-            finish()
-        }
 
-        // 홈으로 가기 버튼
-        var btnHome = findViewById<ImageButton>(R.id.btnHome)
-        btnHome.setOnClickListener {
-            var intent = Intent(applicationContext, AppMainActivity::class.java)
-            startActivity(intent)
-        }
 
         val postPosition = intent.getIntExtra("pid", 0) // AppMainActivity에서 받은 pid
 
