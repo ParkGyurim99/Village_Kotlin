@@ -12,6 +12,7 @@
         <entry key="app/src/main/res/drawable/posting_crop_image.xml" value="0.25833333333333336" />
         <entry key="app/src/main/res/drawable/userinfo_low_background.xml" value="0.13703703703703704" />
         <entry key="app/src/main/res/layout/activity_app_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_comment.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23641304347826086" />
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.1734375" />
@@ -20,11 +21,12 @@
         <entry key="app/src/main/res/layout/db_text.xml" value="0.1" />
         <entry key="app/src/main/res/layout/dialog.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/list_comment_item.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/layout/list_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/map_activity.xml" value="0.17777777777777778" />
         <entry key="app/src/main/res/layout/post.xml" value="0.22" />
         <entry key="app/src/main/res/layout/posting.xml" value="0.23314606741573032" />
-        <entry key="app/src/main/res/layout/writing.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/writing.xml" value="0.33" />
       </map>
     </option>
   </component>

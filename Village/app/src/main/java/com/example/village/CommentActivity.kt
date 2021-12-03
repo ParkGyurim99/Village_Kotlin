@@ -53,13 +53,6 @@ class CommentActivity : AppCompatActivity() {
             finish()
         }
 
-        // 홈으로 가기 버튼
-        var btnHome = findViewById<ImageButton>(R.id.btnHome)
-        btnHome.setOnClickListener {
-            var intent = Intent(applicationContext, AppMainActivity::class.java)
-            startActivity(intent)
-        }
-
         postPosition = intent.getIntExtra("pid2", 0)
 
         // 댓글 작성 완료 버튼 누를 시, DB에 댓글 업로드
