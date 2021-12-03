@@ -56,7 +56,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private var now : LatLng? = null
+    var now : LatLng? = null
     private var currentMarker : Marker? = null
 
     // 포스트 가져와서 배열 만들기

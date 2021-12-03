@@ -31,13 +31,6 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun setOnItemClickListener(listener : OnItemClickListener) {
         this.listener = listener
     }
-    fun toTimeStamp(num: Long) {
-        var sampleDate = "2020-06-14 10:12:14"
-        var sf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        var date = sf.parse(sampleDate)
-        var today = Calendar.getInstance()
-        var calcuDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
-    }
     fun setListData(data: MutableList<Post>) {
         postList = data
     }
@@ -58,9 +51,7 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     // 아이템 레이아웃과 결합
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ViewHolder {
         mContext = parent.context
-
         val view = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false)
-
         return ViewHolder(view)
     }
 
@@ -84,7 +75,6 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         val image: ImageView = itemView.findViewById(R.id.image)
         val title: TextView = itemView.findViewById(R.id.title)
-
         val location: TextView = itemView.findViewById(R.id.location)
         val time: TextView = itemView.findViewById(R.id.time)
         val price: TextView = itemView.findViewById(R.id.price)
@@ -108,8 +98,8 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             title.text = item.title                      // 제목
             time.text = item.time.toString()             // 시간
-            price.text = item.price.toString() + "원"     // 가격
-            location.text = item.location                 // 장소
+            price.text = item.price.toString() + "원"    // 가격
+            location.text = item.location.toString()     // 장소
             // category.text = item.category
 
             val pos = adapterPosition
@@ -129,6 +119,20 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             postList.clear()
             for (snapshot in querySnapshot!!.documents) {
                 if (snapshot.getString(option)!!.contains(serachWord)) {
+                    var item = snapshot.toObject(Post::class.java)
+                    postList.add(item!!)
+                }
+            }
+            notifyDataSetChanged()
+        }
+    }
+    fun refresh(myLocation : String, option: String) {
+        firestore = FirebaseFirestore.getInstance()
+        firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            // ArrayList 비워줌
+            postList.clear()
+            for (snapshot in querySnapshot!!.documents) {
+                if (snapshot.getString(option)!!.contains(myLocation)) {
                     var item = snapshot.toObject(Post::class.java)
                     postList.add(item!!)
                 }

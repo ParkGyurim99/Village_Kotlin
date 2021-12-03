@@ -1,12 +1,20 @@
 package com.example.village
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.location.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,20 +22,31 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.village.databinding.ActivityAppMainBinding
 import com.example.village.model.Post
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_app_main.*
-
+import java.io.IOException
+import java.util.*
+val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+val PERMISSIONS_REQUEST_CODE = 100
 class AppMainActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityAppMainBinding
-    lateinit var auth : FirebaseAuth
+    private lateinit var binding: ActivityAppMainBinding
+    lateinit var auth: FirebaseAuth
 
     /* 리사이클러 뷰 */
-    private lateinit var adapter : ListAdapter
+    private lateinit var adapter: ListAdapter
     private val viewModel by lazy { ViewModelProvider(this).get(ListViewModel::class.java) }
-
+    var locationManager : LocationManager? = null
+    private val REQUEST_CODE_LOCATION : Int = 2
+    var currentLocation : String = ""
+    var latitude : Double? = null
+    var longitude : Double? = null
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -37,7 +56,7 @@ class AppMainActivity : AppCompatActivity() {
         recyclerView.adapter = ListAdapter()
         recyclerView.layoutManager = LinearLayoutManager(this)
         auth = Firebase.auth
-        
+
         checkUser(auth)
 
         /* 위치 권한 허용 요청 */
@@ -50,31 +69,37 @@ class AppMainActivity : AppCompatActivity() {
                 }
                 permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                     // Only approximate location access granted.
-                } else -> {
-                // No location access granted.
+                }
+                else -> {
+                    // No location access granted.
                 }
             }
         }
 
-        locationPermissionRequest.launch(arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION))
+        locationPermissionRequest.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        )
 
 
-        val btn_map : ImageView = findViewById<ImageView>(R.id.btn_map)
-        val btn_search : ImageButton = findViewById<ImageButton>(R.id.btn_search)
-        var searchWord : EditText = findViewById<EditText>(R.id.searchWord)
-        val btn_write : ImageButton = findViewById<ImageButton>(R.id.btn_write)
-        val btn_userInfo : ImageButton = findViewById<ImageButton>(R.id.btn_userInfo)
-
+        val btn_map: ImageView = findViewById<ImageView>(R.id.btn_map)
+        val btn_search: ImageButton = findViewById<ImageButton>(R.id.btn_search)
+        var searchWord: EditText = findViewById<EditText>(R.id.searchWord)
+        val btn_write: ImageButton = findViewById<ImageButton>(R.id.btn_write)
+        val btn_userInfo: ImageButton = findViewById<ImageButton>(R.id.btn_userInfo)
+        val btn_home: ImageButton = findViewById<ImageButton>(R.id.btn_home)
+        val btn_findLocation: ImageButton = findViewById<ImageButton>(R.id.btn_findLocation)
         var searchOption = "title"
-        // val recyclerView : RecyclerView = findViewById(R.id.recyclerview)
+        var myLocationOption = "location"
         btn_map.setOnClickListener {
             val intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
         }
 
         binding.btnSearch.setOnClickListener {
+            Log.d("################", currentLocation)
             (recyclerView.adapter as ListAdapter).search(searchWord.text.toString(), searchOption)
         }
 
@@ -84,15 +109,28 @@ class AppMainActivity : AppCompatActivity() {
         }
 
         btn_userInfo.setOnClickListener {
-            val intent = Intent(this,UserInfoActivity::class.java)
+            val intent = Intent(this, UserInfoActivity::class.java)
             startActivity(intent)
         }
 
+        btn_home.setOnClickListener {
+            val intent = Intent(this, AppMainActivity::class.java)
+            startActivity(intent.setAction(Intent.ACTION_MAIN) .addCategory(Intent.CATEGORY_LAUNCHER)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+
+        }
+
+        binding.btnFindLocation.setOnClickListener {
+            Log.d("################", currentLocation)
+            getLocation()
+            Log.d("################", currentLocation)
+            (recyclerView.adapter as ListAdapter).refresh(currentLocation, myLocationOption)
+        }
 
         adapter = ListAdapter()
 
         // 리사이클러 뷰
-        val recyclerView : RecyclerView = findViewById(R.id.recyclerView)
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)  // 리사이클러 뷰 방향 등을 설정
         recyclerView.adapter = adapter  // 어댑터 장착
         observerData()
@@ -106,8 +144,8 @@ class AppMainActivity : AppCompatActivity() {
         }
 
         adapter.setOnItemClickListener(object :
-            ListAdapter.OnItemClickListener{
-            override fun onItemClick(v: View, data: Post, pos : Int) {
+            ListAdapter.OnItemClickListener {
+            override fun onItemClick(v: View, data: Post, pos: Int) {
                 Intent(this@AppMainActivity, PostActivity::class.java).apply {
                     putExtra("user-posts", data)
                     putExtra("pid", pos)
@@ -125,16 +163,118 @@ class AppMainActivity : AppCompatActivity() {
         })
     }
 
-    private fun checkUser(auth: FirebaseAuth?){
-        if(auth?.currentUser == null){
+    private fun checkUser(auth: FirebaseAuth?) {
+        if (auth?.currentUser == null) {
             auth?.signOut()
             goLoginActivity()
         }
     }
 
-    private fun goLoginActivity(){
-        val intent = Intent(this,LoginActivity::class.java)
+    private fun goLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+
+//    private fun getLocation() {
+//        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+//        var userLocation: Location = getLatLng()
+//        if (userLocation != null) {
+//            latitude = userLocation.latitude
+//            longitude = userLocation.longitude
+//            Log.d("CheckCurrentLocation", "현재 내 위치 값: $latitude, $longitude")
+//
+//            var mGeocoder = Geocoder(applicationContext, Locale.KOREAN)
+//            var mResultList: List<Address>? = null
+//            try {
+//                mResultList = mGeocoder.getFromLocation(
+//                    latitude!!, longitude!!, 1
+//                )
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//            }
+//            if (mResultList != null) {
+//                Log.d("CheckCurrentLocation", mResultList[0].getAddressLine(0))
+//                currentLocation = mResultList[0].getAddressLine(0)
+//                currentLocation = currentLocation.substring(11)
+//            }
+//        }
+//    }
+//    private fun getLocation(){
+//        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+//        var userLocation: Location = getLatLng()
+//        if(userLocation != null){
+//            latitude = userLocation.latitude
+//            longitude = userLocation.longitude
+//            Log.d("CheckCurrentLocation", "현재 내 위치 값: ${latitude}, ${longitude}")
+//
+//            var mGeoCoder =  Geocoder(applicationContext, Locale.KOREAN)
+//            var mResultList: List<Address>? = null
+//            try{
+//                mResultList = mGeoCoder.getFromLocation(
+//                    latitude!!, longitude!!, 1
+//                )
+//            }catch(e: IOException){
+//                e.printStackTrace()
+//            }
+//            if(mResultList != null){
+//                Log.d("CheckCurrentLocation", mResultList[0].getAddressLine(0))
+//                currentLocation = mResultList[0].getAddressLine(0)
+//                currentLocation = currentLocation.substring(11)
+//            }
+//        }
+//    }
+//    private fun getLatLng(): Location{
+//        var currentLatLng: Location? = null
+//        var hasFineLocationPermission = ContextCompat.checkSelfPermission(this,
+//            Manifest.permission.ACCESS_FINE_LOCATION)
+//        var hasCoarseLocationPermission = ContextCompat.checkSelfPermission(this,
+//            Manifest.permission.ACCESS_COARSE_LOCATION)
+//
+//        if(hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
+//            hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED){
+//            val locatioNProvider = LocationManager.GPS_PROVIDER
+//            currentLatLng = locationManager?.getLastKnownLocation(locatioNProvider)
+//        }else{
+//            if(ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])){
+//                Toast.makeText(this, "앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+//                ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE)
+//            }else{
+//                ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE)
+//            }
+//            currentLatLng = getLatLng()
+//        }
+//        return currentLatLng!!
+//    }
+fun getLocation() {
+    Log.d("################", currentLocation)
+    var locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
+
+    var locationListener = object : LocationListener {
+        override fun onLocationChanged(p0: Location) {
+            val latLng = LatLng(
+                p0!!.latitude,
+                p0!!.longitude
+            )  //locationText.setText("현재 위치 - 위도 : ${p0.latitude} / 경도 : ${p0.longitude}")
+            var mGeocoder = Geocoder(applicationContext, Locale.KOREAN)
+            var mResultList: List<Address>? = null
+
+            try {
+                //mResultList = mGeocoder.getFromLocation(p0.latitude, p0.longitude, 1)
+                mResultList = mGeocoder.getFromLocation(p0!!.latitude, p0!!.longitude, 1)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+            if (mResultList != null) {
+                Log.d("Check Current Location", mResultList[0].getAddressLine(0))
+                currentLocation = mResultList[0].getAddressLine(0)
+                currentLocation = currentLocation.substring(11)
+                Log.d("################", currentLocation)
+            }
+
+        }
+    }
     }
 }
