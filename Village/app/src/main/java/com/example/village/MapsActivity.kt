@@ -1,6 +1,7 @@
 package com.example.village
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.*
@@ -35,15 +36,12 @@ import java.io.IOException
 import java.util.*
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.location.LocationManager
+
+
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
-    /*private var items = listOf<Post>(
-        Post("1", "1", "nickname1", "url1", "item1", "category", "location", 1, "12:00", 5000, "body1", 0),
-        Post("2", "2", "nickname2", "url2", "item2", "category", "location", 1, "10:00", 9900, "body2", 0),
-        Post("3", "3", "nickname3", "url3", "item3", "category", "location", 1, "09:00", 8000, "body3", 0)
-    )*/
-    private var locations = listOf<LatLng>(LatLng(35.887556, 128.612727), LatLng(35.886083, 128.612524), LatLng(35.885092, 128.613795))
-
     /* 데이터베이스 */
     var database = FirebaseFirestore.getInstance()
 
@@ -55,6 +53,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var cLocation : String
 
     var now : LatLng? = null
     private var currentMarker : Marker? = null
@@ -82,6 +81,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var intent = intent
+        cLocation = intent.getStringExtra("cLocation").toString()
 
         var btn = findViewById<ImageButton>(R.id.imageButton1)
 
@@ -119,18 +121,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // 포스트 개수만큼 마커 띄우기
         for (i in 0..(itemList.size-1)) {
-            val latLng = LatLng(itemList[i].lat!!, itemList[i].lng!!)
+            if (itemList[i].location == cLocation) {
+                val latLng = LatLng(itemList[i].lat!!, itemList[i].lng!!)
 
-            println("${itemList[i].lat}")
-            println("${itemList[i].lng}")
+                println("${itemList[i].lat}")
+                println("${itemList[i].lng}")
 
-            val address = itemList[i].location!!
-            marker = mMap.addMarker(MarkerOptions().position(latLng).title("${itemList[i].title}").snippet("$address"))
+                val address = itemList[i].location!!
+                marker = mMap.addMarker(
+                    MarkerOptions().position(latLng).title("${itemList[i].title}")
+                        .snippet("$address")
+                )
 
-            marker.tag = itemList[i].imageUrl + "#" +    // index 0번
-                    itemList[i].price.toString() + "#" + // index 1번
-                    itemList[i].time.toString() + "#" +  // index 2번
-                    i.toString()
+                marker.tag = itemList[i].imageUrl + "#" +    // index 0번
+                        itemList[i].price.toString() + "#" + // index 1번
+                        itemList[i].time.toString() + "#" +  // index 2번
+                        i.toString()
+            }
         }
 
         // 아이템 마커 클릭 리스너: 마커 클릭하면 카드뷰 띄움
@@ -163,7 +170,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     image.clipToOutline = true
 
-                    title.text = marker!!.title
+                    title.text = marker.title
                     location.text = marker.snippet
                     price.text = markerTagList[1] + "원"
                     time.text = markerTagList[2]
@@ -195,8 +202,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
-        now = LatLng(itemList[0].lat!!, itemList[0].lng!!)  // 지도 화면 나갔다가 들어오면 여기서 IndexOutOfBoundsException 발생
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(now, 18.0f))
+        for (i in 0..(itemList.size-1)) {
+            if (itemList[i].location == cLocation) {
+                now = LatLng(itemList[i].lat!!, itemList[i].lng!!)
+                break
+            }
+        }
+        //now = LatLng(itemList[0].lat!!, itemList[0].lng!!)  // 지도 화면 나갔다가 들어오면 여기서 IndexOutOfBoundsException 발생
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(now, 18f))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(now, 18.0f))
     }
 
     fun getLocation() {
@@ -205,20 +219,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         var locationListener = object : LocationListener {
             override fun onLocationChanged(p0: Location) {
-                val latLng = LatLng(p0!!.latitude, p0!!.longitude)  //locationText.setText("현재 위치 - 위도 : ${p0.latitude} / 경도 : ${p0.longitude}")
+                val latLng = LatLng(p0.latitude, p0.longitude)  //locationText.setText("현재 위치 - 위도 : ${p0.latitude} / 경도 : ${p0.longitude}")
                 var mGeocoder = Geocoder(applicationContext, Locale.KOREAN)
                 var mResultList : List<Address>? = null
 
                 try {
                     //mResultList = mGeocoder.getFromLocation(p0.latitude, p0.longitude, 1)
-                    mResultList = mGeocoder.getFromLocation(p0!!.latitude, p0!!.longitude, 1)
+                    mResultList = mGeocoder.getFromLocation(p0.latitude, p0.longitude, 1)
                 } catch (e : IOException) {
                     e.printStackTrace()
                 }
 
                 if (mResultList != null) {
                     Log.d("Check Current Location", mResultList[0].getAddressLine(0))
-                    locationText.setText(mResultList[0].getAddressLine(0).substring(11, 17))
+                    locationText.text = mResultList[0].getAddressLine(0).substring(11, 17)
                 }
 
                 // 현재 위치 → 마커 없을 때 새로 생성

@@ -92,8 +92,12 @@ class AppMainActivity : AppCompatActivity() {
         val btn_findLocation: ImageButton = findViewById<ImageButton>(R.id.btn_findLocation)
         var searchOption = "title"
         var myLocationOption = "location"
+
         btn_map.setOnClickListener {
             val intent = Intent(this, MapsActivity::class.java)
+            //intent.putExtra("cLocation", currentLocation)
+            /* 에뮬레이터 실행시 스태틱 값 전달 */
+            intent.putExtra("cLocation", "북구 대현동")
             startActivity(intent)
         }
 
