@@ -88,17 +88,19 @@ class PostActivity : AppCompatActivity() {
                     Log.d("document.data", "${document.data}")
                     val getData = document.toObject<UserModel>()
 
-                    profile_image_path = getData!!.imageUrl.toString()
+                    if (getData!!.imageUrl != null) {
+                        profile_image_path = getData.imageUrl.toString()
 
-                    println("이미지 경로 : " + profile_image_path)
+                        println("이미지 경로 : " + profile_image_path)
 
-                    var gsRef_profile_image = storage.getReferenceFromUrl(profile_image_path!!)
+                        var gsRef_profile_image = storage.getReferenceFromUrl(profile_image_path!!)
 
-                    gsRef_profile_image.downloadUrl.addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            GlideApp.with(this)
-                                .load(it.result)
-                                .into(ivProfile)
+                        gsRef_profile_image.downloadUrl.addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                GlideApp.with(this)
+                                    .load(it.result)
+                                    .into(ivProfile)
+                            }
                         }
                     }
                 }
