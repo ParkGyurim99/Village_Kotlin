@@ -45,6 +45,7 @@ class AppMainActivity : AppCompatActivity() {
     var locationManager : LocationManager? = null
     private val REQUEST_CODE_LOCATION : Int = 2
     var currentLocation : String = "북구 산격동"
+    var catecoryName : String = "유아도서"
     var latitude : Double? = null
     var longitude : Double? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,8 +91,18 @@ class AppMainActivity : AppCompatActivity() {
         val btn_userInfo: ImageButton = findViewById<ImageButton>(R.id.btn_userInfo)
         val btn_home: ImageButton = findViewById<ImageButton>(R.id.btn_home)
         val btn_findLocation: ImageButton = findViewById<ImageButton>(R.id.btn_findLocation)
+        val btn_category1: Button = findViewById<Button>(R.id.btn_category1)
+        val btn_category2: Button = findViewById<Button>(R.id.btn_category2)
+        val btn_category3: Button = findViewById<Button>(R.id.btn_category3)
+        val btn_category4: Button = findViewById<Button>(R.id.btn_category4)
+        val btn_category5: Button = findViewById<Button>(R.id.btn_category5)
+        val btn_category6: Button = findViewById<Button>(R.id.btn_category6)
+        val btn_category7: Button = findViewById<Button>(R.id.btn_category7)
+        val btn_category8: Button = findViewById<Button>(R.id.btn_category8)
+
         var searchOption = "title"
         var myLocationOption = "location"
+        var categoryOption = "category"
 
         btn_map.setOnClickListener {
             val intent = Intent(this, MapsActivity::class.java)
@@ -119,6 +130,12 @@ class AppMainActivity : AppCompatActivity() {
             val intent = Intent(this, AppMainActivity::class.java)
             startActivity(intent.setAction(Intent.ACTION_MAIN) .addCategory(Intent.CATEGORY_LAUNCHER)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
+
+        binding.btnCategory1.setOnClickListener{
+            Log.d("################", catecoryName)
+            Log.d("################", categoryOption)
+            (recyclerView.adapter as ListAdapter).search(catecoryName, categoryOption)
         }
 
         binding.btnFindLocation.setOnClickListener {
