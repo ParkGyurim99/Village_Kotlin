@@ -44,11 +44,10 @@ class AppMainActivity : AppCompatActivity() {
     private val viewModel by lazy { ViewModelProvider(this).get(ListViewModel::class.java) }
     var locationManager : LocationManager? = null
     private val REQUEST_CODE_LOCATION : Int = 2
-    var currentLocation : String = ""
+    var currentLocation : String = "북구 산격동"
     var latitude : Double? = null
     var longitude : Double? = null
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityAppMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -99,7 +98,6 @@ class AppMainActivity : AppCompatActivity() {
         }
 
         binding.btnSearch.setOnClickListener {
-            Log.d("################", currentLocation)
             (recyclerView.adapter as ListAdapter).search(searchWord.text.toString(), searchOption)
         }
 
@@ -117,7 +115,6 @@ class AppMainActivity : AppCompatActivity() {
             val intent = Intent(this, AppMainActivity::class.java)
             startActivity(intent.setAction(Intent.ACTION_MAIN) .addCategory(Intent.CATEGORY_LAUNCHER)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-
         }
 
         binding.btnFindLocation.setOnClickListener {
@@ -175,106 +172,50 @@ class AppMainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    private fun getLocation(){
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager?
+        var userLocation: Location = getLatLng()
+        if(userLocation != null){
+            latitude = userLocation.latitude
+            longitude = userLocation.longitude
+            Log.d("CheckCurrentLocation", "현재 내 위치 값: ${latitude}, ${longitude}")
 
-
-//    private fun getLocation() {
-//        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager?
-//        var userLocation: Location = getLatLng()
-//        if (userLocation != null) {
-//            latitude = userLocation.latitude
-//            longitude = userLocation.longitude
-//            Log.d("CheckCurrentLocation", "현재 내 위치 값: $latitude, $longitude")
-//
-//            var mGeocoder = Geocoder(applicationContext, Locale.KOREAN)
-//            var mResultList: List<Address>? = null
-//            try {
-//                mResultList = mGeocoder.getFromLocation(
-//                    latitude!!, longitude!!, 1
-//                )
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-//            if (mResultList != null) {
-//                Log.d("CheckCurrentLocation", mResultList[0].getAddressLine(0))
-//                currentLocation = mResultList[0].getAddressLine(0)
-//                currentLocation = currentLocation.substring(11)
-//            }
-//        }
-//    }
-//    private fun getLocation(){
-//        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager?
-//        var userLocation: Location = getLatLng()
-//        if(userLocation != null){
-//            latitude = userLocation.latitude
-//            longitude = userLocation.longitude
-//            Log.d("CheckCurrentLocation", "현재 내 위치 값: ${latitude}, ${longitude}")
-//
-//            var mGeoCoder =  Geocoder(applicationContext, Locale.KOREAN)
-//            var mResultList: List<Address>? = null
-//            try{
-//                mResultList = mGeoCoder.getFromLocation(
-//                    latitude!!, longitude!!, 1
-//                )
-//            }catch(e: IOException){
-//                e.printStackTrace()
-//            }
-//            if(mResultList != null){
-//                Log.d("CheckCurrentLocation", mResultList[0].getAddressLine(0))
-//                currentLocation = mResultList[0].getAddressLine(0)
-//                currentLocation = currentLocation.substring(11)
-//            }
-//        }
-//    }
-//    private fun getLatLng(): Location{
-//        var currentLatLng: Location? = null
-//        var hasFineLocationPermission = ContextCompat.checkSelfPermission(this,
-//            Manifest.permission.ACCESS_FINE_LOCATION)
-//        var hasCoarseLocationPermission = ContextCompat.checkSelfPermission(this,
-//            Manifest.permission.ACCESS_COARSE_LOCATION)
-//
-//        if(hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
-//            hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED){
-//            val locatioNProvider = LocationManager.GPS_PROVIDER
-//            currentLatLng = locationManager?.getLastKnownLocation(locatioNProvider)
-//        }else{
-//            if(ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])){
-//                Toast.makeText(this, "앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
-//                ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE)
-//            }else{
-//                ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE)
-//            }
-//            currentLatLng = getLatLng()
-//        }
-//        return currentLatLng!!
-//    }
-fun getLocation() {
-    Log.d("################", currentLocation)
-    var locationManager = getSystemService(LOCATION_SERVICE) as LocationManager?
-
-    var locationListener = object : LocationListener {
-        override fun onLocationChanged(p0: Location) {
-            val latLng = LatLng(
-                p0!!.latitude,
-                p0!!.longitude
-            )  //locationText.setText("현재 위치 - 위도 : ${p0.latitude} / 경도 : ${p0.longitude}")
-            var mGeocoder = Geocoder(applicationContext, Locale.KOREAN)
+            var mGeoCoder =  Geocoder(applicationContext, Locale.KOREAN)
             var mResultList: List<Address>? = null
-
-            try {
-                //mResultList = mGeocoder.getFromLocation(p0.latitude, p0.longitude, 1)
-                mResultList = mGeocoder.getFromLocation(p0!!.latitude, p0!!.longitude, 1)
-            } catch (e: IOException) {
+            try{
+                mResultList = mGeoCoder.getFromLocation(
+                    latitude!!, longitude!!, 1
+                )
+            }catch(e: IOException){
                 e.printStackTrace()
             }
-
-            if (mResultList != null) {
-                Log.d("Check Current Location", mResultList[0].getAddressLine(0))
+            if(mResultList != null){
+                Log.d("CheckCurrentLocation", mResultList[0].getAddressLine(0))
                 currentLocation = mResultList[0].getAddressLine(0)
                 currentLocation = currentLocation.substring(11)
-                Log.d("################", currentLocation)
             }
-
         }
     }
+    private fun getLatLng(): Location{
+        var currentLatLng: Location? = null
+        var hasFineLocationPermission = ContextCompat.checkSelfPermission(this,
+            Manifest.permission.ACCESS_FINE_LOCATION)
+        var hasCoarseLocationPermission = ContextCompat.checkSelfPermission(this,
+            Manifest.permission.ACCESS_COARSE_LOCATION)
+
+        if(hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
+            hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED){
+            val locationProvider = LocationManager.NETWORK_PROVIDER
+            currentLatLng = locationManager?.getLastKnownLocation(locationProvider)
+        }else{
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])){
+                Toast.makeText(this, "앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+                ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE)
+            }else{
+                ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE)
+            }
+            currentLatLng = getLatLng()
+        }
+        return currentLatLng!!
     }
 }
