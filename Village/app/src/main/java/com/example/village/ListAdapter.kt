@@ -112,13 +112,27 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    fun search(serachWord : String, option : String) {
+    fun search(searchWord : String, option : String) {
         firestore = FirebaseFirestore.getInstance()
         firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             // ArrayList 비워줌
             postList.clear()
             for (snapshot in querySnapshot!!.documents) {
-                if (snapshot.getString(option)!!.contains(serachWord)) {
+                if (snapshot.getString(option)!!.contains(searchWord)) {
+                    var item = snapshot.toObject(Post::class.java)
+                    postList.add(item!!)
+                }
+            }
+            notifyDataSetChanged()
+        }
+    }
+    fun category(myCategory : String, option: String) {
+        firestore = FirebaseFirestore.getInstance()
+        firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            // ArrayList 비워줌
+            postList.clear()
+            for (snapshot in querySnapshot!!.documents) {
+                if (snapshot.getString(option)!!.contains(myCategory)) {
                     var item = snapshot.toObject(Post::class.java)
                     postList.add(item!!)
                 }

@@ -45,7 +45,14 @@ class AppMainActivity : AppCompatActivity() {
     var locationManager : LocationManager? = null
     private val REQUEST_CODE_LOCATION : Int = 2
     var currentLocation : String = "북구 산격동"
-    var catecoryName : String = "유아도서"
+    var catecoryName1 : String = "유아도서"
+    var catecoryName2 : String = "유아도서"
+    var catecoryName3 : String = "유아도서"
+    var catecoryName4 : String = "유아도서"
+    var catecoryName5 : String = "유아도서"
+    var catecoryName6 : String = "유아도서"
+    var catecoryName7 : String = "유아도서"
+    var catecoryName8 : String = "유아도서"
     var latitude : Double? = null
     var longitude : Double? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,16 +111,16 @@ class AppMainActivity : AppCompatActivity() {
         var myLocationOption = "location"
         var categoryOption = "category"
 
+        binding.btnSearch.setOnClickListener {
+            (recyclerView.adapter as ListAdapter).search(searchWord.text.toString(), searchOption)
+        }
+
         btn_map.setOnClickListener {
             val intent = Intent(this, MapsActivity::class.java)
             //intent.putExtra("cLocation", currentLocation)
             /* 에뮬레이터 실행시 스태틱 값 전달 */
             intent.putExtra("cLocation", "북구 대현동")
             startActivity(intent)
-        }
-
-        binding.btnSearch.setOnClickListener {
-            (recyclerView.adapter as ListAdapter).search(searchWord.text.toString(), searchOption)
         }
 
         btn_write.setOnClickListener {
@@ -132,11 +139,35 @@ class AppMainActivity : AppCompatActivity() {
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
 
-        binding.btnCategory1.setOnClickListener{
-            Log.d("################", catecoryName)
-            Log.d("################", categoryOption)
-            (recyclerView.adapter as ListAdapter).search(catecoryName, categoryOption)
+        binding.btnSearch.setOnClickListener {
+            (recyclerView.adapter as ListAdapter).search(searchWord.text.toString(), searchOption)
         }
+
+        binding.btnCategory1.setOnClickListener{
+            (recyclerView.adapter as ListAdapter).category(catecoryName1, categoryOption)
+        }
+        binding.btnCategory2.setOnClickListener{
+            (recyclerView.adapter as ListAdapter).category(catecoryName2, categoryOption)
+        }
+        binding.btnCategory3.setOnClickListener{
+            (recyclerView.adapter as ListAdapter).category(catecoryName3, categoryOption)
+        }
+        binding.btnCategory4.setOnClickListener{
+            (recyclerView.adapter as ListAdapter).category(catecoryName4, categoryOption)
+        }
+        binding.btnCategory5.setOnClickListener{
+            (recyclerView.adapter as ListAdapter).category(catecoryName5, categoryOption)
+        }
+        binding.btnCategory6.setOnClickListener{
+            (recyclerView.adapter as ListAdapter).category(catecoryName6, categoryOption)
+        }
+        binding.btnCategory7.setOnClickListener{
+            (recyclerView.adapter as ListAdapter).category(catecoryName7, categoryOption)
+        }
+        binding.btnCategory8.setOnClickListener{
+            (recyclerView.adapter as ListAdapter).category(catecoryName8, categoryOption)
+        }
+
 
         binding.btnFindLocation.setOnClickListener {
             Log.d("################", currentLocation)
