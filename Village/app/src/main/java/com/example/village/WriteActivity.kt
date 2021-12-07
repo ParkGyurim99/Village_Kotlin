@@ -153,8 +153,8 @@ class WriteActivity : AppCompatActivity() {
                     }
 
                     R.id.cat_item2 -> {
-                        btnCategory.setText("생활가전")
-                        category = "생활가전"
+                        btnCategory.setText("생활필수품")
+                        category = "생활필수품"
                     }
 
                     R.id.cat_item3 -> {
