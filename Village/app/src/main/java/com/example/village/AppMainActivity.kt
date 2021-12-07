@@ -102,7 +102,7 @@ class AppMainActivity : AppCompatActivity() {
         val btn_category4: Button = findViewById<Button>(R.id.btn_category4)
         val btn_category5: Button = findViewById<Button>(R.id.btn_category5)
         val btn_category6: Button = findViewById<Button>(R.id.btn_category6)
-
+        var tv_mylocation: TextView = findViewById<TextView>(R.id.tv_mylocation)
 
         var searchOption = "title"
         var myLocationOption = "location"
@@ -164,6 +164,7 @@ class AppMainActivity : AppCompatActivity() {
         binding.btnFindLocation.setOnClickListener {
             Log.d("################", currentLocation)
             getLocation()
+            tv_mylocation.text = currentLocation
             Log.d("################", currentLocation)
             (recyclerView.adapter as ListAdapter).refresh(currentLocation, myLocationOption)
         }
