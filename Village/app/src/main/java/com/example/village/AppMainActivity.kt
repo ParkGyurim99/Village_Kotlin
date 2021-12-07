@@ -45,14 +45,12 @@ class AppMainActivity : AppCompatActivity() {
     var locationManager : LocationManager? = null
     private val REQUEST_CODE_LOCATION : Int = 2
     var currentLocation : String = "북구 산격동"
-    var catecoryName1 : String = "유아도서"
-    var catecoryName2 : String = "유아도서"
-    var catecoryName3 : String = "유아도서"
-    var catecoryName4 : String = "유아도서"
-    var catecoryName5 : String = "유아도서"
-    var catecoryName6 : String = "유아도서"
-    var catecoryName7 : String = "유아도서"
-    var catecoryName8 : String = "유아도서"
+    var catecoryName1 : String = "디지털기기"
+    var catecoryName2 : String = "생활필수품"
+    var catecoryName3 : String = "공구"
+    var catecoryName4 : String = "스포츠/레져"
+    var catecoryName5 : String = "도서"
+    var catecoryName6 : String = "기타"
     var latitude : Double? = null
     var longitude : Double? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,8 +102,7 @@ class AppMainActivity : AppCompatActivity() {
         val btn_category4: Button = findViewById<Button>(R.id.btn_category4)
         val btn_category5: Button = findViewById<Button>(R.id.btn_category5)
         val btn_category6: Button = findViewById<Button>(R.id.btn_category6)
-        val btn_category7: Button = findViewById<Button>(R.id.btn_category7)
-        val btn_category8: Button = findViewById<Button>(R.id.btn_category8)
+
 
         var searchOption = "title"
         var myLocationOption = "location"
@@ -161,12 +158,7 @@ class AppMainActivity : AppCompatActivity() {
         binding.btnCategory6.setOnClickListener{
             (recyclerView.adapter as ListAdapter).category(catecoryName6, categoryOption)
         }
-        binding.btnCategory7.setOnClickListener{
-            (recyclerView.adapter as ListAdapter).category(catecoryName7, categoryOption)
-        }
-        binding.btnCategory8.setOnClickListener{
-            (recyclerView.adapter as ListAdapter).category(catecoryName8, categoryOption)
-        }
+
 
 
         binding.btnFindLocation.setOnClickListener {
