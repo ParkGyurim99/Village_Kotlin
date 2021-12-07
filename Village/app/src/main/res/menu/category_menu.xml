@@ -10,11 +10,11 @@
 
     <item
         android:id="@+id/cat_item3"
-        android:title="스포츠/레저"/>
+        android:title="공구"/>
 
     <item
         android:id="@+id/cat_item4"
-        android:title="공구"/>
+        android:title="스포츠/레저"/>
 
     <item
         android:id="@+id/cat_item5"

@@ -153,7 +153,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/background_btn"
-                        android:text="Sports leisure"
+                        android:text="Tools"
                         android:textSize="12sp"
                         app:layout_constraintStart_toEndOf="@+id/btn_category2"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -174,7 +174,7 @@
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="4dp"
                         android:background="@drawable/background_btn"
-                        android:text="Tools"
+                        android:text="Sports leisure"
                         android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
