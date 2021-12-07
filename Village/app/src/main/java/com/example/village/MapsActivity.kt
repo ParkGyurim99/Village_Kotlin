@@ -232,7 +232,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 if (mResultList != null) {
                     Log.d("Check Current Location", mResultList[0].getAddressLine(0))
-                    locationText.text = mResultList[0].getAddressLine(0).substring(11, 17)
+                    locationText.text = mResultList[0].getAddressLine(0).substring(11,17)
                 }
 
                 // 현재 위치 → 마커 없을 때 새로 생성
