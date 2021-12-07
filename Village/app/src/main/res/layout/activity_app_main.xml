@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_rowWeight="3"
-    android:background="@drawable/background_btn"
+    android:background="@drawable/background_top"
 
     android:orientation="vertical"
     tools:context=".AppMainActivity">
@@ -88,6 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="9dp"
                 android:orientation="vertical">
 
                 <LinearLayout
