@@ -95,8 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center|center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingBottom="0">
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/btn_category1"
