@@ -48,7 +48,7 @@ class AppMainActivity : AppCompatActivity() {
     var catecoryName1 : String = "디지털기기"
     var catecoryName2 : String = "생활필수품"
     var catecoryName3 : String = "공구"
-    var catecoryName4 : String = "스포츠/레져"
+    var catecoryName4 : String = "스포츠/레저"
     var catecoryName5 : String = "도서"
     var catecoryName6 : String = "기타"
     var latitude : Double? = null
