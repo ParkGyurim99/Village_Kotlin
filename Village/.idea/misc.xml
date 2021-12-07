@@ -24,7 +24,7 @@
         <entry key="app/src/main/res/drawable/writing_border_button.xml" value="0.3896833503575077" />
         <entry key="app/src/main/res/drawable/writing_border_input_field_1.xml" value="0.3896833503575077" />
         <entry key="app/src/main/res/drawable/writing_border_input_field_2.xml" value="0.3896833503575077" />
-        <entry key="app/src/main/res/layout/activity_app_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_app_main.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_comment.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23641304347826086" />
