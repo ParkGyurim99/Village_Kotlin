@@ -3,7 +3,7 @@ package com.example.village.model
 import java.io.Serializable
 
 class Comment (var uid : String? = null,
-               var pid : Int? = null,
+               var pid : String? = null,
                var nickname : String? = null,
                var imageUrl : String? = null,
                var timestamp : Long? = null,

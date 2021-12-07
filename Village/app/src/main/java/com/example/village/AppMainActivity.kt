@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.location.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +13,8 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,16 +22,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.village.databinding.ActivityAppMainBinding
 import com.example.village.model.Post
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_app_main.*
 import java.io.IOException
 import java.util.*
+
 val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 val PERMISSIONS_REQUEST_CODE = 100
 class AppMainActivity : AppCompatActivity() {
@@ -41,7 +40,7 @@ class AppMainActivity : AppCompatActivity() {
 
     /* 리사이클러 뷰 */
     private lateinit var adapter: ListAdapter
-    private val viewModel by lazy { ViewModelProvider(this).get(ListViewModel::class.java) }
+
     var locationManager : LocationManager? = null
     private val REQUEST_CODE_LOCATION : Int = 2
     var currentLocation : String = "북구 산격동"
@@ -53,6 +52,12 @@ class AppMainActivity : AppCompatActivity() {
     var catecoryName6 : String = "기타"
     var latitude : Double? = null
     var longitude : Double? = null
+
+    data class PidInfo(var timestamp: Long?, var pid: String?)
+    var pid_with_timestamp = mutableListOf<PidInfo>()
+
+    val listData: MutableList<Post> = mutableListOf<Post>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAppMainBinding.inflate(layoutInflater)
@@ -190,16 +195,64 @@ class AppMainActivity : AppCompatActivity() {
             override fun onItemClick(v: View, data: Post, pos: Int) {
                 Intent(this@AppMainActivity, PostActivity::class.java).apply {
                     putExtra("user-posts", data)
-                    putExtra("pid", pos)
+
+                    var pid: String? = null
+
+                    for (i in 0..pid_with_timestamp.size - 1) {
+                        if (pid_with_timestamp[i].timestamp == data.timestamp) {
+                            pid = pid_with_timestamp[i].pid
+                            break
+                        }
+                    }
+
+                    putExtra("pid", pid)
+                    println("pid#####: " + pid)
+
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }.run { startActivity(this) }
             }
         })
     }
 
+    // 기존 Repository.kt
+    fun getData(): LiveData<MutableList<Post>> {
+        val mutableData = MutableLiveData<MutableList<Post>>()
+        val database = FirebaseFirestore.getInstance()
+        val myRef = database.collection("user-posts")
+
+        myRef.orderBy("timestamp").get()
+            .addOnSuccessListener { documentSnapshot ->
+                for (document in documentSnapshot) {
+                    val getData = document.toObject<Post>()
+                    val getPidInfo = PidInfo(getData.timestamp, document.id)
+
+                    listData.add(getData!!)
+                    pid_with_timestamp.add(getPidInfo)
+
+                    mutableData.value = listData
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("DocSnippets", "Error getting documents: ", exception)
+            }
+
+        return mutableData
+    }
+
+    // 기존 ListViewModel.kt
+    fun fetchData(): LiveData<MutableList<Post>> {
+        val mutableData = MutableLiveData<MutableList<Post>>()
+
+        getData().observeForever{
+            mutableData.value = it
+        }
+
+        return mutableData
+    }
+
     // 리사이클러 뷰
     fun observerData() {
-        viewModel.fetchData().observe(this, Observer {
+        fetchData().observe(this, Observer {
             adapter.setListData(it)
             adapter.notifyDataSetChanged()
         })

@@ -52,7 +52,8 @@ class PostActivity : AppCompatActivity() {
         btnHeart = findViewById(R.id.btnHeart)
         btnComment = findViewById(R.id.btnComment)
 
-        val postPosition = intent.getIntExtra("pid", 0) // AppMainActivity에서 받은 pid
+        val postPosition = intent.getStringExtra("pid") // AppMainActivity에서 받은 pid
+        println("postPosition1 : " + postPosition)
 
         btnComment.setOnClickListener {
             var intent = Intent(applicationContext, CommentActivity::class.java)
@@ -85,13 +86,10 @@ class PostActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    Log.d("document.data", "${document.data}")
                     val getData = document.toObject<UserModel>()
 
                     if (getData!!.imageUrl != null) {
                         profile_image_path = getData.imageUrl.toString()
-
-                        println("이미지 경로 : " + profile_image_path)
 
                         var gsRef_profile_image = storage.getReferenceFromUrl(profile_image_path!!)
 

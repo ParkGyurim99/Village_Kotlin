@@ -114,7 +114,7 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun search(searchWord : String, option : String) {
         firestore = FirebaseFirestore.getInstance()
-        firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+        firestore?.collection("user-posts")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             // ArrayList 비워줌
             postList.clear()
             for (snapshot in querySnapshot!!.documents) {
@@ -126,9 +126,10 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             notifyDataSetChanged()
         }
     }
+
     fun category(myCategory : String, option: String) {
         firestore = FirebaseFirestore.getInstance()
-        firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+        firestore?.collection("user-posts")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             // ArrayList 비워줌
             postList.clear()
             for (snapshot in querySnapshot!!.documents) {
@@ -140,9 +141,10 @@ class ListAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             notifyDataSetChanged()
         }
     }
+
     fun refresh(myLocation : String, option: String) {
         firestore = FirebaseFirestore.getInstance()
-        firestore?.collection("user-posts")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+        firestore?.collection("user-posts")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             // ArrayList 비워줌
             postList.clear()
             for (snapshot in querySnapshot!!.documents) {

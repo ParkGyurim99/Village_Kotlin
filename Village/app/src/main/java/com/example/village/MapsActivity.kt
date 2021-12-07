@@ -58,6 +58,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     var now : LatLng? = null
     private var currentMarker : Marker? = null
 
+    data class PidInfo(var timestamp: Long?, var pid: String?)
+    var pid_with_timestamp = mutableListOf<PidInfo>()
+
     // 포스트 가져와서 배열 만들기
     init {
         database.collection("user-posts").orderBy("timestamp").get()
@@ -65,8 +68,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 if (documentSnapshot != null) {
                     for (document in documentSnapshot) {
                         val getData = document.toObject<Post>()
+                        val getPidInfo = PidInfo(getData.timestamp, document.id)
 
                         itemList.add(getData)
+
+                        pid_with_timestamp.add(getPidInfo)
+
                     }
                 }
             }
@@ -136,7 +143,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 marker.tag = itemList[i].imageUrl + "#" +    // index 0번
                         itemList[i].price.toString() + "#" + // index 1번
                         itemList[i].time.toString() + "#" +  // index 2번
-                        i.toString()
+                        i.toString() + "#" +
+                        pid_with_timestamp[i].pid
             }
         }
 
@@ -176,12 +184,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     time.text = markerTagList[2]
 
                     var index = markerTagList[3].toInt()
+                    var pid = markerTagList[4]
 
                     // 카드뷰 클릭시 상세 페이지로 이동
                     maps_iteminfo.setOnClickListener {
                         var intent = Intent(applicationContext, PostActivity::class.java)
                         intent.putExtra("user-posts", itemList[index])
-                        intent.putExtra("pid", index)
+                        intent.putExtra("pid", pid)
                         startActivity(intent)
                     }
                 } catch (e: IllegalArgumentException) { // 현재 위치 마커 생성 → 마커 클릭해도 카드뷰 안 뜨도록

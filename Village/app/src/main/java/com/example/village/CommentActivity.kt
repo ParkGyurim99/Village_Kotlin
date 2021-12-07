@@ -38,7 +38,7 @@ class CommentActivity : AppCompatActivity() {
     private lateinit var adapter : ListAdapter2
     //private val viewModel by lazy { ViewModelProvider(this).get(ListViewModel2::class.java) }
 
-    var postPosition = 0   // PostActivity에서 받은 pid
+    var postPosition : String? = null   // PostActivity에서 받은 pid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +53,7 @@ class CommentActivity : AppCompatActivity() {
             finish()
         }
 
-        postPosition = intent.getIntExtra("pid2", 0)
+        postPosition = intent.getStringExtra("pid2")
 
         // 댓글 작성 완료 버튼 누를 시, DB에 댓글 업로드
         btnWriteComment.setOnClickListener {
@@ -75,8 +75,7 @@ class CommentActivity : AppCompatActivity() {
                                 nickname = getData.userName.toString()
                                 imagePath = getData.imageUrl.toString()
 
-                                // https://firebasestorage.googleapis.com/v0/b/village-e6e1a.appspot.com/o/profile_images%2FIMAGE_20211202_004827_.png?alt=media&token=c708e9e4-3438-4cb1-b295-34bdc3825345
-                                commentUpload(nickname!!, uid, imagePath!!, body, postPosition) // 리스너 안에다 넣어야 되네..
+                                commentUpload(nickname!!, uid, imagePath!!, body, postPosition!!) // 리스너 안에다 넣어야 되네..
                                 break
                             }
                         }
@@ -92,7 +91,7 @@ class CommentActivity : AppCompatActivity() {
 
         adapter = ListAdapter2()
 
-        adapter.setPid(postPosition)    // pid 값 전달
+        adapter.setPid(postPosition!!)    // pid 값 전달
 
         // 리사이클러 뷰
         val recyclerView : RecyclerView = findViewById(R.id.recyclerView_2)
@@ -115,7 +114,7 @@ class CommentActivity : AppCompatActivity() {
     }
 
     // DB에 댓글 올리는 함수
-    private fun commentUpload(nickname: String, uid: String, imagePath: String, body: String, pid: Int) {
+    private fun commentUpload(nickname: String, uid: String, imagePath: String, body: String, pid: String) {
         var newComment = Comment()
         //var repo2 = Repository2()
 
@@ -157,8 +156,6 @@ class CommentActivity : AppCompatActivity() {
 
                     if (postPosition == getData.pid) {
                         listData.add(getData!!)
-
-                        println("getData.pid: ${getData.pid}")
 
                         mutableData.value = listData
                     }

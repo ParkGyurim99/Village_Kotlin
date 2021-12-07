@@ -17,7 +17,7 @@ class ListAdapter2 : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var commentList = mutableListOf<Comment>()
     private var mContext: Context? = null
-    private var pid: Int? = null
+    private var pid: String? = null
     private var pid_comment_list = ArrayList<Comment>()
     private var pid_comment_index: Int = 0  // 포스트마다 달린 댓글의 리스트를 참조할 index
 
@@ -25,7 +25,7 @@ class ListAdapter2 : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         commentList = data
     }
 
-    fun setPid(pid: Int) {
+    fun setPid(pid: String) {
         this.pid = pid
     }
 
